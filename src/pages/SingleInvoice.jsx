@@ -17,7 +17,9 @@ const SingleInvoice = () => {
         </div>
         <StatusBlock />
       </section>
-      <InvoiceDetails />
+      <section className='mx-4'>
+        <InvoiceDetails />
+      </section>
     </main>
   )
 }

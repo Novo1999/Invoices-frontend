@@ -6,3 +6,11 @@
 * {
   font-family: 'source sans 3';
 }
+
+.invoice-details p {
+  color: rgba(128, 128, 128, 0.651);
+}
+
+.invoice-details h4 {
+  font-size: 16px;
+}

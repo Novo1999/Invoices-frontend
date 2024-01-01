@@ -16,11 +16,13 @@ export const invoices = [
     status: 'paid',
     items: [
       {
+        id: crypto.randomUUID(),
         name: 'Banner design',
         quantity: 1,
         price: 156.41,
       },
       {
+        id: crypto.randomUUID(),
         name: 'Email design',
         quantity: 2,
         price: 426.41,
@@ -51,6 +53,7 @@ export const invoices = [
     status: 'pending',
     items: [
       {
+        id: crypto.randomUUID(),
         name: 'Website Development',
         quantity: 1,
         price: 800.25,
@@ -81,6 +84,7 @@ export const invoices = [
     status: 'draft',
     items: [
       {
+        id: crypto.randomUUID(),
         name: 'Logo Design',
         quantity: 1,
         price: 500.5,
@@ -110,11 +114,13 @@ export const invoices = [
     status: 'paid',
     items: [
       {
+        id: crypto.randomUUID(),
         name: 'Banner design',
         quantity: 1,
         price: 156.41,
       },
       {
+        id: crypto.randomUUID(),
         name: 'Email design',
         quantity: 2,
         price: 426.41,
@@ -145,6 +151,7 @@ export const invoices = [
     status: 'pending',
     items: [
       {
+        id: crypto.randomUUID(),
         name: 'Website Development',
         quantity: 1,
         price: 800.25,
@@ -175,6 +182,7 @@ export const invoices = [
     status: 'draft',
     items: [
       {
+        id: crypto.randomUUID(),
         name: 'Logo Design',
         quantity: 1,
         price: 500.5,
@@ -205,11 +213,13 @@ export const invoices = [
     status: 'paid',
     items: [
       {
+        id: crypto.randomUUID(),
         name: 'Print Design',
         quantity: 1,
         price: 1800.0,
       },
       {
+        id: crypto.randomUUID(),
         name: 'Brochure Design',
         quantity: 2,
         price: 200.2,
@@ -240,11 +250,13 @@ export const invoices = [
     status: 'pending',
     items: [
       {
+        id: crypto.randomUUID(),
         name: 'Social Media Graphics',
         quantity: 3,
         price: 300.6,
       },
       {
+        id: crypto.randomUUID(),
         name: 'Banner Ads',
         quantity: 1,
         price: 250.2,
@@ -275,6 +287,7 @@ export const invoices = [
     status: 'draft',
     items: [
       {
+        id: crypto.randomUUID(),
         name: 'Website Mockup',
         quantity: 2,
         price: 300.15,
@@ -305,6 +318,7 @@ export const invoices = [
     status: 'paid',
     items: [
       {
+        id: crypto.randomUUID(),
         name: 'Illustration',
         quantity: 2,
         price: 650.2,
