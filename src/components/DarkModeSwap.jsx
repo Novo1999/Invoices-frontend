@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
 
 const DarkModeSwap = () => {
-  const [isDark, setIsdark] = useState(
-    JSON.parse(localStorage.getItem('isdark'))
+  const [isDark, setIsDark] = useState(
+    JSON.parse(localStorage.getItem('isDark'))
   )
   useEffect(() => {
-    localStorage.setItem('isdark', JSON.stringify(isDark))
+    localStorage.setItem('isDark', JSON.stringify(isDark))
   }, [isDark])
 
   return (
@@ -13,9 +13,10 @@ const DarkModeSwap = () => {
       {/* this hidden checkbox controls the state */}
       <input
         type='checkbox'
-        onChange={() => setIsdark(!isDark)}
+        onChange={() => setIsDark(!isDark)}
         className='theme-controller'
         value='black'
+        checked={isDark}
       />
 
       {/* sun icon */}
