@@ -9,6 +9,7 @@ const ResButton = ({ children, type }) => {
   }
   if (type === 'delete') {
     style = {
+      tooltipClass: 'tooltip-error',
       background: 'bg-red-500 hover:bg-red-400',
       tooltip: '🗑️',
     }
@@ -20,11 +21,11 @@ const ResButton = ({ children, type }) => {
     }
   }
 
-  const { background, tooltip } = style
+  const { background, tooltip, tooltipClass } = style
 
   return (
     <button
-      className={`btn btn-sm ${background} md:btn-md tooltip lg:btn-lg text-white rounded-[4rem]`}
+      className={`btn btn-sm ${background} ${tooltipClass} md:btn-md tooltip lg:btn-lg text-white rounded-[4rem]`}
       data-tip={tooltip}
     >
       {children}

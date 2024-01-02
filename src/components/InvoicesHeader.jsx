@@ -1,7 +1,10 @@
 import { MdAddCircle } from 'react-icons/md'
 import { invoices } from '../utils/mockInvoices'
+import { useDispatch } from 'react-redux'
+import { open } from '../features/sidebar/sidebarSlice'
 
 const InvoicesHeader = () => {
+  const dispatch = useDispatch()
   return (
     <div className='flex gap-4 mt-4 mx-4 justify-between md:ml-10 lg:ml-5 xl:ml-12'>
       <div className='flex flex-col items-start'>
@@ -22,7 +25,8 @@ const InvoicesHeader = () => {
           <option value='draft'>Pending</option>
           <option value='draft'>Paid</option>
         </select>
-        <button className='btn'>
+        {/* add new invoice */}
+        <button onClick={() => dispatch(open())} className='btn'>
           <MdAddCircle /> New <span className='hidden sm:block'>Invoice</span>
         </button>
       </div>

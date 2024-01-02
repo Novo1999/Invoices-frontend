@@ -2,11 +2,7 @@
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
-    extend: {
-      fontFamily: {
-        patua: ['Patua One'],
-      },
-    },
+    extend: {},
   },
   plugins: [require('daisyui')],
   daisyui: {
