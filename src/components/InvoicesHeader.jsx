@@ -26,8 +26,14 @@ const InvoicesHeader = () => {
           <option value='draft'>Paid</option>
         </select>
         {/* add new invoice */}
-        <button onClick={() => dispatch(open())} className='btn'>
-          <MdAddCircle /> New <span className='hidden sm:block'>Invoice</span>
+        <button
+          onClick={() => dispatch(open())}
+          className='btn rounded-full bg-purple-600 text-white hover:bg-purple-800'
+        >
+          <span className='border border-white rounded-full p-1 text-lg'>
+            <MdAddCircle />
+          </span>
+          New<span className='hidden sm:block'>Invoice</span>
         </button>
       </div>
     </div>

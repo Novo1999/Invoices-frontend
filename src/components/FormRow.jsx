@@ -1,17 +1,40 @@
+import { motion } from 'framer-motion'
 import { useForm } from 'react-hook-form'
 
-const FormRow = ({ label, name }) => {
+const FormRow = ({ label, name, className }) => {
   const { register } = useForm()
 
+  const variants = {
+    open: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        y: { stiffness: 1000, velocity: 100 },
+      },
+    },
+    closed: {
+      y: 50,
+      opacity: 0,
+      transition: {
+        y: { stiffness: 1000 },
+      },
+    },
+  }
+
   return (
-    <fieldset>
-      <label htmlFor={label}>{label}</label>
+    <motion.fieldset
+      className={`flex flex-col gap-4 ${className} mt-2`}
+      variants={variants}
+    >
+      <label className='text-xs sm:text-sm lg:text-base' htmlFor={label}>
+        {label}
+      </label>
       <input
-        className='input input-bordered w-full max-w-xs'
+        className={`input  input-bordered w-full max-w-full`}
         type='text'
         {...register(name)}
       />
-    </fieldset>
+    </motion.fieldset>
   )
 }
 export default FormRow
