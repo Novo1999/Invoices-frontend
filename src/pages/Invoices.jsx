@@ -1,94 +1,122 @@
 import { Reorder } from 'framer-motion'
 import { useEffect, useState } from 'react'
-import { GrDrag } from 'react-icons/gr'
 import InvoicesHeader from '../components/InvoicesHeader'
-import Status from '../components/Status'
-import { invoices } from '../utils/mockInvoices'
 import useWindowDimensions from '../hooks/useWindowDimensions'
-import { SignOutButton } from '@clerk/clerk-react'
-import { useGetInvoicesQuery } from '../features/invoicesApi/invoicesApi.js'
+import {
+  useGetInvoicesQuery,
+  useGetOrdersOfInvoicesQuery,
+  useReorderInvoicesMutation,
+} from '../features/invoicesApi/invoicesApi.js'
+import { FaCross } from 'react-icons/fa6'
+import debouncedReorder from '../utils/deboouncedReorder.js'
+import InvoiceItem from '../components/InvoiceItem.jsx'
 
 const Invoices = () => {
-  const { data } = useGetInvoicesQuery()
-  console.log(data)
-  const [items, setItems] = useState(invoices)
+  const { data, isLoading, isError, error } = useGetInvoicesQuery()
+  const { data: invoicesOrder, isSuccess } = useGetOrdersOfInvoicesQuery()
+
+  const [reorderInvoices] = useReorderInvoicesMutation()
+
+  // state for reordering by dragging
+  const [items, setItems] = useState([])
   // setting dragListener to true for mobile
   const [isDragging, setIsDragging] = useState(false)
   const { width } = useWindowDimensions()
+
+  useEffect(() => {
+    if (!isLoading && !isError) setItems(data)
+  }, [data, isLoading, isError])
 
   useEffect(() => {
     // let the user drag when they are on pc
     if (width > 768) setIsDragging(true)
   }, [width])
 
+  useEffect(() => {
+    if (isSuccess) {
+      setItems((current) =>
+        invoicesOrder.order?.map((id) => {
+          return current.find((item) => item.id === id)
+        })
+      )
+    }
+  }, [isSuccess, invoicesOrder])
+
   const handleReorder = (reorderedIds) => {
     const reorderedInvoices = reorderedIds.map((id) =>
       items.find((invoice) => invoice.id === id)
     )
     setItems(reorderedInvoices)
+    const reorderedInvoicesIds = reorderedInvoices.map((invoice) => invoice.id)
+
+    // Cancel the previous debouncedReorder function
+    debouncedReorder.cancel()
+
+    // Call the debounced function
+    debouncedReorder(reorderInvoices, reorderedInvoicesIds)
+  }
+
+  let content = null
+
+  if (isLoading) {
+    content = Array.from({ length: 10 }, (_, i) => i).map((_) => (
+      <div
+        key={crypto.randomUUID()}
+        className='flex flex-col gap-4 w-full items-center justify-center mt-12'
+      >
+        <div className='skeleton h-4 w-full'></div>
+        <div className='skeleton h-4 w-full'></div>
+      </div>
+    ))
+  }
+  if (!isLoading && isError) {
+    content = (
+      <div role='alert' className='alert alert-error'>
+        <FaCross />
+        <span>{error.status}</span>
+      </div>
+    )
+  }
+
+  if (!isLoading && !isError && data.length === 0) {
+    content = (
+      <div className='stack flex justify-center mt-10 relative z-0 sm:ml-8 lg:right-4 xl:ml-16'>
+        <div className='card shadow-md bg-primary text-primary-content'>
+          <div className='card-body'>
+            <h2 className='card-title'>You have no invoices</h2>
+            <p>Click new invoice to create one.</p>
+          </div>
+        </div>
+      </div>
+    )
+  }
+  if (!isLoading && !isError && isSuccess && data.length > 0) {
+    content = (
+      <Reorder.Group
+        axis='y'
+        values={items.map((item) => item?.id)} //passing the value of ids in an array so they are unique and dragging can happen
+        onReorder={handleReorder}
+      >
+        {items.map((invoice) => {
+          return (
+            // invoice items
+            <InvoiceItem
+              isDragging={isDragging}
+              invoice={invoice}
+              setIsDragging={setIsDragging}
+              key={invoice?.id || crypto.randomUUID()}
+            />
+          )
+        })}
+      </Reorder.Group>
+    )
   }
 
   return (
     // invoice parent
     <main className='min-[425px]:w-96 min-[425px]:ml-5 sm:w-[40rem] sm:ml-24 lg:w-fit lg:ml-52 xl:m-auto xl:px-20 pb-12'>
       <InvoicesHeader />
-      <Reorder.Group
-        axis='y'
-        values={items.map((item) => item.id)}
-        onReorder={handleReorder}
-      >
-        {items.map((invoice) => {
-          const { id, amount, due, name, status } = invoice
-          return (
-            // invoice items
-            <Reorder.Item
-              className='grid grid-cols-2 mx-4 xl:ml-12 mt-4 bg-[#3b82f6] md:ml-10 lg:ml-5 p-4 rounded-lg shadow-lg items-center'
-              key={id}
-              dragListener={isDragging}
-              onDragStart={() => width < 768 && setIsDragging(true)}
-              onDragEnd={() => width < 768 && setIsDragging(false)}
-              value={id}
-            >
-              <div className='space-y-2 sm:grid sm:grid-cols-3 items-center'>
-                <div>
-                  <span className='text-gray-200'># </span>
-                  <span className='font-bold'>{id}</span>
-                </div>
-                <p className='lg:col-span-1 text-xs'>Due {due}</p>
-                <p className='block sm:hidden font-semibold'>$ {amount}</p>
-                <p className='text-sm lg:text-base hidden sm:block text-end font-semibold'>
-                  {name}
-                </p>
-              </div>
-              <div className='relative flex flex-col gap-4 sm:gap-0 sm:grid grid-cols-2 sm:items-center'>
-                <div className='flex sm:hidden justify-end gap-4 items-center'>
-                  <p className='text-sm lg:text-base  text-end font-semibold'>
-                    {name}{' '}
-                  </p>
-                  <span
-                    onTouchStart={() => setIsDragging(true)}
-                    style={{ touchAction: 'none' }}
-                  >
-                    <GrDrag />
-                  </span>
-                </div>
-
-                <p className='hidden sm:block text-center font-semibold'>
-                  $ {amount}
-                </p>
-                <span
-                  onTouchStart={() => setIsDragging(true)}
-                  style={{ touchAction: 'none' }}
-                  className='absolute right-[150px] lg:right-[170px] hidden sm:block cursor-grab'
-                >
-                  <GrDrag />
-                </span>
-                <Status place='component' status={status} />
-              </div>
-            </Reorder.Item>
-          )
-        })}
-      </Reorder.Group>
+      {content}
     </main>
   )
 }

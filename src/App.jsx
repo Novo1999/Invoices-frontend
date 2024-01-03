@@ -7,6 +7,7 @@ import Invoices from './pages/Invoices'
 import Layout from './pages/Layout'
 import SingleInvoice from './pages/SingleInvoice'
 import {
+  RedirectToSignIn,
   SignInButton,
   SignOutButton,
   SignedIn,
@@ -39,7 +40,7 @@ function App() {
   return (
     <Provider store={store}>
       <SignedOut>
-        <SignInButton />
+        <RedirectToSignIn />
       </SignedOut>
       <SignedIn>
         <RouterProvider router={router} />
