@@ -36,6 +36,7 @@ const ItemListField = () => {
         )
       })}
       <button
+        type='button'
         onClick={handleAddNewItemField}
         className='sm:hidden  btn text-white btn-square btn-outline w-full text-lg lg:text-xl'
       >
@@ -43,6 +44,7 @@ const ItemListField = () => {
         <span className='hidden lg:block'>new Item</span>
       </button>
       <button
+        type='button'
         onClick={handleAddNewItemField}
         className='hidden sm:flex rounded-full btn text-white btn-square btn-outline w-full text-lg lg:text-xl'
       >

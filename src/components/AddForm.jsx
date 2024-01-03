@@ -61,8 +61,8 @@ const AddForm = () => {
     }
   }, [sidebarOpen])
 
-  const onSubmit = (e) => {
-    console.log(e.target.value)
+  const onSubmit = (data) => {
+    console.log(data)
   }
 
   return (
