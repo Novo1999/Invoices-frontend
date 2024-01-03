@@ -5,11 +5,10 @@ import useWindowDimensions from '../hooks/useWindowDimensions.js'
 
 const InvoiceItem = ({ isDragging, invoice, setIsDragging }) => {
   const { width } = useWindowDimensions()
-  const { id, name, due, amount, status } = invoice
+  const { _id, id, name, due, amount, status } = invoice || {}
   return (
     <Reorder.Item
       className='grid grid-cols-2 mx-4 xl:ml-12 mt-4 bg-[#3b82f6] md:ml-10 lg:ml-5 p-4 rounded-lg shadow-lg items-center'
-      key={id}
       dragListener={isDragging}
       onDragStart={() => width < 768 && setIsDragging(true)}
       onDragEnd={() => width < 768 && setIsDragging(false)}
@@ -47,7 +46,7 @@ const InvoiceItem = ({ isDragging, invoice, setIsDragging }) => {
         >
           <GrDrag />
         </span>
-        <Status place='component' status={status} />
+        <Status id={_id} place='component' status={status} />
       </div>
     </Reorder.Item>
   )

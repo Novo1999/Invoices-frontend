@@ -13,7 +13,14 @@ import InvoiceItem from '../components/InvoiceItem.jsx'
 
 const Invoices = () => {
   const { data, isLoading, isError, error } = useGetInvoicesQuery()
-  const { data: invoicesOrder, isSuccess } = useGetOrdersOfInvoicesQuery()
+  const {
+    data: invoicesOrder,
+    isSuccess,
+    isLoading: isLoadingOrder,
+    isError: isOrderError,
+  } = useGetOrdersOfInvoicesQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+  })
 
   const [reorderInvoices] = useReorderInvoicesMutation()
 
@@ -58,7 +65,7 @@ const Invoices = () => {
 
   let content = null
 
-  if (isLoading) {
+  if (isLoading || isLoadingOrder) {
     content = Array.from({ length: 10 }, (_, i) => i).map((_) => (
       <div
         key={crypto.randomUUID()}
@@ -69,7 +76,7 @@ const Invoices = () => {
       </div>
     ))
   }
-  if (!isLoading && isError) {
+  if (!isLoading && !isOrderError && isError) {
     content = (
       <div role='alert' className='alert alert-error'>
         <FaCross />
@@ -78,7 +85,13 @@ const Invoices = () => {
     )
   }
 
-  if (!isLoading && !isError && data.length === 0) {
+  if (
+    !isLoading &&
+    !isError &&
+    !isOrderError &&
+    isSuccess &&
+    data.length === 0
+  ) {
     content = (
       <div className='stack flex justify-center mt-10 relative z-0 sm:ml-8 lg:right-4 xl:ml-16'>
         <div className='card shadow-md bg-primary text-primary-content'>
@@ -90,7 +103,7 @@ const Invoices = () => {
       </div>
     )
   }
-  if (!isLoading && !isError && isSuccess && data.length > 0) {
+  if (!isLoading && !isError && !isOrderError && isSuccess && data.length > 0) {
     content = (
       <Reorder.Group
         axis='y'

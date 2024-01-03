@@ -1,10 +1,7 @@
-import { invoices } from '../utils/mockInvoices'
+/* eslint-disable react/prop-types */
 import ItemRow from './ItemRow'
 
-const testInvoice = invoices[0]
-console.log(testInvoice)
-
-const InvoiceDetails = () => {
+const InvoiceDetails = ({ invoice }) => {
   const {
     id,
     due,
@@ -20,7 +17,7 @@ const InvoiceDetails = () => {
       street: billToStreet,
     },
     items,
-  } = testInvoice
+  } = invoice
 
   return (
     <main className='max-w-full xl:max-w-fit flex justify-center p-4 rounded-lg relative shadow-lg flex-col invoice-details sm:ml-20'>

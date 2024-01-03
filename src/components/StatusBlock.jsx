@@ -1,7 +1,8 @@
 import ResButton from './ResButton'
 import Status from './Status'
 
-const StatusBlock = ({ status = 'pending' }) => {
+const StatusBlock = ({ invoice }) => {
+  const { status } = invoice
   return (
     <section className='flex w-full mx-4 shadow-lg p-4 flex-col sm:ml-24 sm:flex-row justify-between mt-20 rounded-lg xl:max-w-[54rem] 2xl:max-w-[67.5rem]'>
       <div className='flex gap-4 justify-center items-center mb-4'>

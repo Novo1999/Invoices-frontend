@@ -2,9 +2,10 @@ import { FaArrowRight, FaCircle } from 'react-icons/fa6'
 import { Link } from 'react-router-dom'
 import { setStatusBallColor, setStatusColor } from '../utils/statusColor'
 
-const Status = ({ status, place }) => {
+const Status = ({ status, place, id }) => {
   return (
     <Link
+      to={`/invoices/${id}`}
       className={`${setStatusColor(
         status
       )} rounded-lg p-3 min-[325px]:ml-7 w-32 sm:w-full sm:ml-0 sm:flex gap-4 justify-center shadow-lg items-center`}

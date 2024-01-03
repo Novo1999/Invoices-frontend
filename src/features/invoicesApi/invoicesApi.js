@@ -15,6 +15,9 @@ const invoicesApi = invoiceApi.injectEndpoints({
     getOrdersOfInvoices: builder.query({
       query: () => '/order',
     }),
+    getInvoice: builder.query({
+      query: (id) => `/protected/${id}`,
+    }),
   }),
 })
 
@@ -22,4 +25,5 @@ export const {
   useGetInvoicesQuery,
   useGetOrdersOfInvoicesQuery,
   useReorderInvoicesMutation,
+  useGetInvoiceQuery,
 } = invoicesApi
