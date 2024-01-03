@@ -5,8 +5,12 @@ import InvoicesHeader from '../components/InvoicesHeader'
 import Status from '../components/Status'
 import { invoices } from '../utils/mockInvoices'
 import useWindowDimensions from '../hooks/useWindowDimensions'
+import { SignOutButton } from '@clerk/clerk-react'
+import { useGetInvoicesQuery } from '../features/invoicesApi/invoicesApi.js'
 
 const Invoices = () => {
+  const { data } = useGetInvoicesQuery()
+  console.log(data)
   const [items, setItems] = useState(invoices)
   // setting dragListener to true for mobile
   const [isDragging, setIsDragging] = useState(false)
