@@ -23,9 +23,7 @@ const Invoices = () => {
     isSuccess,
     isLoading: isLoadingOrder,
     isError: isOrderError,
-  } = useGetOrdersOfInvoicesQuery(undefined, {
-    refetchOnMountOrArgChange: true,
-  })
+  } = useGetOrdersOfInvoicesQuery()
 
   const [reorderInvoices] = useReorderInvoicesMutation()
 

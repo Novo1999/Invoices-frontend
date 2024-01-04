@@ -66,16 +66,16 @@ const AddForm = () => {
   }
 
   return (
-    <>
+    <section>
       <Overlay />
       <motion.aside
         initial={false}
         animate={sidebarOpen ? 'open' : 'closed'}
         ref={sidebarRef}
-        className={`absolute top-0 bg-slate-800 rounded-r-lg text-white ${delayedClass} min-h-full form-input`}
+        className={`absolute top-0 bg-slate-800 rounded-r-lg text-white ${delayedClass} min-h-full `}
       >
         <motion.form
-          className='h-full overflow-y-auto space-y-2 text-xs'
+          className='h-full overflow-y-scroll space-y-2 text-xs form-input'
           initial='closed'
           animate={sidebarOpen ? 'open' : 'closed'}
           variants={sidebar}
@@ -124,23 +124,11 @@ const AddForm = () => {
           </div>
           <FormRow label='Project Description' name='project' />
           <p className='text-xl'>Item List</p>
-          <div className='grid grid-cols-3 lg:grid-cols-6 *:text-lg *:relative *:top-4'>
-            <label className='sm:col-span-2' htmlFor='item-name'>
-              Item Name
-            </label>
-            <label htmlFor='item-quantity'>Qty.</label>
-            <label htmlFor='item-price'>Price</label>
-            <label className='hidden lg:block' htmlFor='item-total-price'>
-              Total
-            </label>
-            <label className='hidden lg:block' htmlFor='item-total-price'>
-              Delete
-            </label>
-          </div>
+
           <ItemListField />
         </motion.form>
       </motion.aside>
-    </>
+    </section>
   )
 }
 export default AddForm

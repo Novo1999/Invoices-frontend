@@ -8,7 +8,6 @@ import { useGetInvoiceQuery } from '../features/invoicesApi/invoicesApi.js'
 const SingleInvoice = () => {
   const { id } = useParams()
   const { data, isLoading, isError } = useGetInvoiceQuery(id)
-  console.log(data?.at(0))
   let content = null
 
   if (isLoading) {

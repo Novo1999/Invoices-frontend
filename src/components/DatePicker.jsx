@@ -19,7 +19,7 @@ const DatePick = () => {
         useRange={false}
         onChange={handleValueChange}
         asSingle={true}
-        displayFormat={'DD/MM/YYYY'}
+        displayFormat='DD/MM/YYYY'
       />
     </div>
   )

@@ -2,7 +2,9 @@ import { motion } from 'framer-motion'
 import { useForm } from 'react-hook-form'
 
 const FormRow = ({ label, name, className }) => {
-  const { register } = useForm()
+  const { register, watch } = useForm()
+
+  console.log(watch('itemName'))
 
   const variants = {
     open: {
