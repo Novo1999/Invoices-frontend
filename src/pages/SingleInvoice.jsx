@@ -1,4 +1,5 @@
-import { FaArrowLeft, FaCross } from 'react-icons/fa6'
+import { FaArrowLeft } from 'react-icons/fa6'
+import { ImCross } from 'react-icons/im'
 import { Link, useParams } from 'react-router-dom'
 import InvoiceDetails from '../components/InvoiceDetails'
 import StatusBlock from '../components/StatusBlock'
@@ -16,8 +17,8 @@ const SingleInvoice = () => {
 
   if (!isLoading && isError) {
     content = (
-      <div role='alert' className='alert alert-error'>
-        <FaCross />
+      <div role='alert' className='alert alert-error flex justify-center'>
+        <ImCross />
         <span>Error getting Invoice details!!!</span>
       </div>
     )

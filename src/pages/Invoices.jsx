@@ -1,18 +1,23 @@
 import { Reorder } from 'framer-motion'
 import { useEffect, useState } from 'react'
+import { ImCross } from 'react-icons/im'
+import InvoiceItem from '../components/InvoiceItem.jsx'
 import InvoicesHeader from '../components/InvoicesHeader'
-import useWindowDimensions from '../hooks/useWindowDimensions'
 import {
   useGetInvoicesQuery,
   useGetOrdersOfInvoicesQuery,
   useReorderInvoicesMutation,
 } from '../features/invoicesApi/invoicesApi.js'
-import { FaCross } from 'react-icons/fa6'
+import useWindowDimensions from '../hooks/useWindowDimensions'
 import debouncedReorder from '../utils/deboouncedReorder.js'
-import InvoiceItem from '../components/InvoiceItem.jsx'
+import { useSelector } from 'react-redux'
+import { filterByStatus } from '../utils/filterByStatus.js'
 
 const Invoices = () => {
-  const { data, isLoading, isError, error } = useGetInvoicesQuery()
+  const { filterBy } = useSelector((state) => state.filter)
+  const { data, isLoading, isError, error } = useGetInvoicesQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+  })
   const {
     data: invoicesOrder,
     isSuccess,
@@ -30,6 +35,13 @@ const Invoices = () => {
   const [isDragging, setIsDragging] = useState(false)
   const { width } = useWindowDimensions()
 
+  // prevent user from dragging the items when they filter by status
+  useEffect(() => {
+    if (filterBy !== '') setIsDragging(false)
+    if (filterBy === '') setIsDragging(true)
+  }, [filterBy])
+
+  // set items when no loading or error state on mount
   useEffect(() => {
     if (!isLoading && !isError) setItems(data)
   }, [data, isLoading, isError])
@@ -49,6 +61,7 @@ const Invoices = () => {
     }
   }, [isSuccess, invoicesOrder])
 
+  // this reorders the invoices
   const handleReorder = (reorderedIds) => {
     const reorderedInvoices = reorderedIds.map((id) =>
       items.find((invoice) => invoice.id === id)
@@ -79,7 +92,7 @@ const Invoices = () => {
   if (!isLoading && !isOrderError && isError) {
     content = (
       <div role='alert' className='alert alert-error'>
-        <FaCross />
+        <ImCross />
         <span>{error.status}</span>
       </div>
     )
@@ -109,18 +122,21 @@ const Invoices = () => {
         axis='y'
         values={items.map((item) => item?.id)} //passing the value of ids in an array so they are unique and dragging can happen
         onReorder={handleReorder}
+        layoutScroll
       >
-        {items.map((invoice) => {
-          return (
-            // invoice items
-            <InvoiceItem
-              isDragging={isDragging}
-              invoice={invoice}
-              setIsDragging={setIsDragging}
-              key={invoice?.id || crypto.randomUUID()}
-            />
-          )
-        })}
+        {items
+          .filter((item) => filterByStatus(filterBy, item))
+          .map((invoice) => {
+            return (
+              // invoice items
+              <InvoiceItem
+                isDragging={isDragging}
+                invoice={invoice}
+                setIsDragging={setIsDragging}
+                key={invoice?.id || crypto.randomUUID()}
+              />
+            )
+          })}
       </Reorder.Group>
     )
   }

@@ -1,4 +1,4 @@
-const ResButton = ({ children, type }) => {
+const ResButton = ({ children, type, onClick }) => {
   let style = {}
 
   if (type === 'edit') {
@@ -9,15 +9,29 @@ const ResButton = ({ children, type }) => {
   }
   if (type === 'delete') {
     style = {
-      tooltipClass: 'tooltip-error',
+      tooltipClass: 'tooltip-error text-white',
       background: 'bg-red-500 hover:bg-red-400',
       tooltip: '🗑️',
     }
   }
   if (type === 'mark as paid') {
     style = {
-      background: 'bg-purple-500 hover:bg-purple-400',
+      background: 'bg-green-500 hover:bg-green-400 text-white',
       tooltip: '💸',
+    }
+  }
+
+  if (type === 'mark as draft') {
+    style = {
+      background: 'bg-gray-500 hover:bg-gray-400 text-white',
+      tooltip: '📝',
+    }
+  }
+
+  if (type === 'mark as pending') {
+    style = {
+      background: 'bg-orange-600 hover:bg-orange-500 text-white',
+      tooltip: '⏳',
     }
   }
 
@@ -25,7 +39,8 @@ const ResButton = ({ children, type }) => {
 
   return (
     <button
-      className={`btn btn-sm ${background} ${tooltipClass} md:btn-md tooltip lg:btn-lg text-white rounded-[4rem]`}
+      onClick={onClick}
+      className={`btn btn-sm ${background} ${tooltipClass} md:btn-md tooltip lg:btn-lg rounded-[4rem]`}
       data-tip={tooltip}
     >
       {children}

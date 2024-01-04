@@ -1,11 +1,17 @@
+import { ImCross } from 'react-icons/im'
 import { MdAddCircle } from 'react-icons/md'
-import { useDispatch } from 'react-redux'
-import { open } from '../features/sidebar/sidebarSlice'
+import { useDispatch, useSelector } from 'react-redux'
 import { useGetInvoicesQuery } from '../features/invoicesApi/invoicesApi.js'
-import { FaCross } from 'react-icons/fa6'
+import { open } from '../features/sidebar/sidebarSlice'
+import { filter } from '../features/filter/filterSlice.js'
 
 const InvoicesHeader = () => {
-  const { data, isLoading, isError, error } = useGetInvoicesQuery()
+  const { filterBy } = useSelector((state) => state.filter)
+  const { data, isLoading, isError } = useGetInvoicesQuery()
+  // getting filtered item count
+  const filteredInvoicesCount = data?.filter(
+    (item) => item.status === filterBy
+  ).length
   const dispatch = useDispatch()
 
   let content = null
@@ -16,8 +22,8 @@ const InvoicesHeader = () => {
   if (!isLoading && isError) {
     content = (
       <div role='alert' className='alert alert-error'>
-        <FaCross />
-        <span>Error! Task failed successfully.</span>
+        <ImCross />
+        <span>Error getting Tasks!!!</span>
       </div>
     )
   }
@@ -35,13 +41,18 @@ const InvoicesHeader = () => {
     content = (
       <>
         <h1 className='text-center font-semibold text-xl'>Invoices</h1>
-        <p className='block sm:hidden'>{data?.length} invoices</p>
+        <p className='block sm:hidden'>
+          {filteredInvoicesCount || data?.length} {filterBy}{' '}
+          {filterBy === '' && 'total'} invoices
+        </p>
         <p className='hidden sm:block'>
-          There are {data?.length} total invoices
+          There are {filteredInvoicesCount || data?.length} total
+          {' ' + filterBy} invoices
         </p>
       </>
     )
   }
+
   return (
     <div className='flex gap-4 mt-4 mx-4 justify-between md:ml-10 lg:ml-5 xl:ml-12'>
       <div className='flex flex-col items-start  sm:w-52'>{content}</div>
@@ -49,11 +60,13 @@ const InvoicesHeader = () => {
         <select
           className='select select-bordered w-full max-w-xs'
           name='status'
+          defaultValue={filterBy}
+          onChange={(e) => dispatch(filter(e.target.value))}
         >
           <option value=''>Filter By Status</option>
           <option value='draft'>Draft</option>
-          <option value='draft'>Pending</option>
-          <option value='draft'>Paid</option>
+          <option value='pending'>Pending</option>
+          <option value='paid'>Paid</option>
         </select>
         {/* add new invoice */}
         <button
