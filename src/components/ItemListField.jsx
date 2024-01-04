@@ -9,12 +9,12 @@ import { useForm } from 'react-hook-form'
 const ItemListField = () => {
   const [currentFields, setCurrentFields] = useState([{ id: makeId(8) }])
 
-  const ref = useRef(null)
-
   const handleAddNewItemField = () => {
-    setCurrentFields((currfields) => [...currfields, { id: makeId(8) }])
+    setCurrentFields((currFields) => [...currFields, { id: makeId(8) }])
     const formContainer = document.querySelector('.form-input')
-    formContainer.scrollTop += 100
+    setTimeout(() => {
+      formContainer.scrollTo(0, formContainer.scrollHeight)
+    }, 50)
   }
 
   const handleDeleteItemListField = (id) => {
@@ -29,13 +29,12 @@ const ItemListField = () => {
       {currentFields.map(({ id }) => {
         return (
           <div
-            ref={ref}
             key={id}
             className='grid grid-cols-3 lg:grid-cols-6 gap-2 items-center justify-center'
           >
             <FormRow className='sm:col-span-2' name='itemName' label='' />
-            <FormRow name='quantity' label='' />
-            <FormRow name='price' label='' />
+            <FormRow type='number' name='quantity' label='' />
+            <FormRow type='number' name='price' label='' />
             <p className='hidden lg:block text-lg mt-6'>$ 156.5</p>
             <p className='text-lg block lg:hidden'>Total: $ 156.5</p>
             <button

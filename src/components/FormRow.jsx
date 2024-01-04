@@ -1,10 +1,25 @@
 import { motion } from 'framer-motion'
 import { useForm } from 'react-hook-form'
+import { emailRegex } from '../utils/constants.js'
 
-const FormRow = ({ label, name, className }) => {
-  const { register, watch } = useForm()
+const FormRow = ({ label, name, className, type }) => {
+  const {
+    register,
+    watch,
+    formState: { errors },
+  } = useForm()
+  console.log(errors)
 
-  console.log(watch('itemName'))
+  const setValidationProperties = (name) => {
+    let validation = { required: true }
+    if (name === 'name') {
+      validation.maxLength = 20
+    }
+    if (name === 'email') {
+      validation.pattern = emailRegex
+    }
+    return validation
+  }
 
   const variants = {
     open: {
@@ -33,8 +48,8 @@ const FormRow = ({ label, name, className }) => {
       </label>
       <input
         className={`input  input-bordered w-full max-w-full`}
-        type='text'
-        {...register(name)}
+        type={type === 'number' ? 'number' : 'text'}
+        {...register(name, setValidationProperties(name))}
       />
     </motion.fieldset>
   )

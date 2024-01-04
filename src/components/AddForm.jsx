@@ -66,7 +66,7 @@ const AddForm = () => {
   }
 
   return (
-    <section>
+    <section className=''>
       <Overlay />
       <motion.aside
         initial={false}
@@ -75,7 +75,7 @@ const AddForm = () => {
         className={`absolute top-0 bg-slate-800 rounded-r-lg text-white ${delayedClass} min-h-full `}
       >
         <motion.form
-          className='h-full overflow-y-scroll space-y-2 text-xs form-input'
+          className='h-full overflow-y-auto space-y-2 text-xs form-input'
           initial='closed'
           animate={sidebarOpen ? 'open' : 'closed'}
           variants={sidebar}
@@ -86,9 +86,9 @@ const AddForm = () => {
           <p className='text-lg font-bold text-purple-500'>Bill From</p>
           <FormRow label='Street Address' name='street' />
           <div className='flex justify-around gap-2'>
-            <FormRow label='City' name='city' />
-            <FormRow label='Post Code' name='postCode' />
-            <FormRow label='Country' name='country' />
+            <FormRow label='City' name='fromCity' />
+            <FormRow label='Post Code' name='fromPostCode' />
+            <FormRow label='Country' name='fromCountry' />
           </div>
           {/* bill to */}
           <p className='text-lg text-purple-400'>Bill To</p>
@@ -98,9 +98,9 @@ const AddForm = () => {
             <FormRow label='Street Address' name='street' />
           </div>
           <div className='flex justify-between gap-2'>
-            <FormRow label='City' name='city' />
-            <FormRow label='Post Code' name='postCode' />
-            <FormRow label='Country' name='country' />
+            <FormRow label='City' name='toCity' />
+            <FormRow label='Post Code' name='toPostCode' />
+            <FormRow label='Country' name='toCountry' />
           </div>
           <div className='flex justify-between items-center gap-4'>
             <div className='space-y-2 mt-2'>
@@ -126,6 +126,9 @@ const AddForm = () => {
           <p className='text-xl'>Item List</p>
 
           <ItemListField />
+          <button className='bg-white text-black' type='submit'>
+            Submit
+          </button>
         </motion.form>
       </motion.aside>
     </section>

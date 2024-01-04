@@ -5,6 +5,25 @@ const invoicesApi = invoiceApi.injectEndpoints({
     getInvoices: builder.query({
       query: () => '/protected',
     }),
+    addInvoice: builder.mutation({
+      query: (data) => ({
+        url: '/protected/',
+        method: 'POST',
+        body: data,
+      }),
+      async onQueryStarted(data, { dispatch, queryFulfilled }) {
+        const postResult = dispatch(
+          invoiceApi.util.updateQueryData('getInvoices', undefined, (draft) => {
+            draft.push(data)
+          })
+        )
+        try {
+          await queryFulfilled
+        } catch (error) {
+          postResult.undo()
+        }
+      },
+    }),
     reorderInvoices: builder.mutation({
       query: (order) => ({
         url: '/order',
@@ -48,6 +67,7 @@ const invoicesApi = invoiceApi.injectEndpoints({
 
 export const {
   useGetInvoicesQuery,
+  useAddInvoiceMutation,
   useGetOrdersOfInvoicesQuery,
   useReorderInvoicesMutation,
   useChangeInvoiceStatusMutation,

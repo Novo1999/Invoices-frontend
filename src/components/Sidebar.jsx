@@ -12,7 +12,10 @@ const Sidebar = () => {
     <>
       <SidebarContainer>
         <div
-          onClick={() => dispatch(open())}
+          onClick={() => {
+            window.scrollTo({ top: 0, behavior: 'smooth' })
+            dispatch(open())
+          }}
           className='bg-blue-500 p-4 size-fit text-white md:size-20 flex justify-center items-center md:text-2xl tooltip tooltip-right tooltip-bg-blue-300 cursor-pointer'
           data-tip='Add New'
         >

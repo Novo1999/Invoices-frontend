@@ -2,8 +2,10 @@ import { Reorder } from 'framer-motion'
 import { GrDrag } from 'react-icons/gr'
 import Status from './Status.jsx'
 import useWindowDimensions from '../hooks/useWindowDimensions.js'
+import { useSelector } from 'react-redux'
 
 const InvoiceItem = ({ isDragging, invoice, setIsDragging }) => {
+  const { filterBy } = useSelector((state) => state.filter)
   const { width } = useWindowDimensions()
   const { _id, id, name, due, amount, status } = invoice || {}
   return (
@@ -31,7 +33,7 @@ const InvoiceItem = ({ isDragging, invoice, setIsDragging }) => {
             {name}{' '}
           </p>
           <span
-            onTouchStart={() => setIsDragging(true)}
+            onTouchStart={() => filterBy === '' && setIsDragging(true)}
             style={{ touchAction: 'none' }}
           >
             <GrDrag />
@@ -40,7 +42,7 @@ const InvoiceItem = ({ isDragging, invoice, setIsDragging }) => {
 
         <p className='hidden sm:block text-center font-semibold'>$ {amount}</p>
         <span
-          onTouchStart={() => setIsDragging(true)}
+          onTouchStart={() => filterBy === '' && setIsDragging(true)}
           style={{ touchAction: 'none' }}
           className='absolute right-[150px] lg:right-[170px] hidden sm:block cursor-grab'
         >
