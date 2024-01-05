@@ -1,20 +1,25 @@
 import { motion } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { FormProvider, useForm } from 'react-hook-form'
 import { useSelector } from 'react-redux'
 import DatePick from './DatePicker'
 import FormRow from './FormRow'
 import ItemListField from './ItemListField'
 import Overlay from './Overlay'
-import PaymentTerms from './PaymentTerms'
 import useWindowDimensions from '../hooks/useWindowDimensions'
 import { setFormWidth } from '../utils/setFormWidth'
 
 const AddForm = () => {
   const { sidebarOpen } = useSelector((state) => state.sidebar)
-  const { handleSubmit } = useForm()
   const [delayedClass, setDelayedClass] = useState('')
   const { width } = useWindowDimensions()
+  const methods = useForm({
+    defaultValues: {
+      itemList: [{ itemName: '', quantity: '', price: '' }],
+    },
+  })
+
+  console.log(methods.watch())
 
   const sidebarRef = useRef(null)
   useEffect(() => {
@@ -72,64 +77,62 @@ const AddForm = () => {
         initial={false}
         animate={sidebarOpen ? 'open' : 'closed'}
         ref={sidebarRef}
-        className={`absolute top-0 bg-slate-800 rounded-r-lg text-white ${delayedClass} min-h-full `}
+        className={`absolute top-0 bg-slate-800 rounded-r-lg text-white ${delayedClass} min-h-full overflow-y-auto form-input`}
       >
-        <motion.form
-          className='h-full overflow-y-auto space-y-2 text-xs form-input'
-          initial='closed'
-          animate={sidebarOpen ? 'open' : 'closed'}
-          variants={sidebar}
-          onSubmit={handleSubmit(onSubmit)}
-        >
-          <h1 className='text-2xl'>Add New</h1>
-          {/* bill from */}
-          <p className='text-lg font-bold text-purple-500'>Bill From</p>
-          <FormRow label='Street Address' name='street' />
-          <div className='flex justify-around gap-2'>
-            <FormRow label='City' name='fromCity' />
-            <FormRow label='Post Code' name='fromPostCode' />
-            <FormRow label='Country' name='fromCountry' />
-          </div>
-          {/* bill to */}
-          <p className='text-lg text-purple-400'>Bill To</p>
-          <div>
-            <FormRow label="Client's Name" name='name' />
-            <FormRow label="Client's Email" name='email' />
+        <FormProvider {...methods}>
+          <motion.form
+            className='h-full space-y-2 text-xs '
+            initial='closed'
+            animate={sidebarOpen ? 'open' : 'closed'}
+            variants={sidebar}
+            onSubmit={methods.handleSubmit(onSubmit)}
+          >
+            <h1 className='text-2xl'>Add New</h1>
+            {/* bill from */}
+            <p className='text-lg font-bold text-purple-500'>Bill From</p>
             <FormRow label='Street Address' name='street' />
-          </div>
-          <div className='flex justify-between gap-2'>
-            <FormRow label='City' name='toCity' />
-            <FormRow label='Post Code' name='toPostCode' />
-            <FormRow label='Country' name='toCountry' />
-          </div>
-          <div className='flex justify-between items-center gap-4'>
-            <div className='space-y-2 mt-2'>
-              <label
-                className='text-xs sm:text-sm lg:text-base'
-                htmlFor='invoice date'
-              >
-                Invoice Date
-              </label>
-              <DatePick />
+            <div className='flex justify-around gap-2'>
+              <FormRow label='City' name='fromCity' />
+              <FormRow label='Post Code' name='fromPostCode' />
+              <FormRow label='Country' name='fromCountry' />
             </div>
-            <div className='space-y-2 mt-2'>
-              <label
-                className='text-xs sm:text-sm lg:text-base'
-                htmlFor='invoice date'
-              >
-                Payment Terms
-              </label>
-              <PaymentTerms />
+            {/* bill to */}
+            <p className='text-lg text-purple-400'>Bill To</p>
+            <div>
+              <FormRow label="Client's Name" name='name' />
+              <FormRow label="Client's Email" name='email' />
+              <FormRow label='Street Address' name='clientStreet' />
             </div>
-          </div>
-          <FormRow label='Project Description' name='project' />
-          <p className='text-xl'>Item List</p>
-
-          <ItemListField />
-          <button className='bg-white text-black' type='submit'>
-            Submit
-          </button>
-        </motion.form>
+            <div className='flex justify-between gap-2'>
+              <FormRow label='City' name='toCity' />
+              <FormRow label='Post Code' name='toPostCode' />
+              <FormRow label='Country' name='toCountry' />
+            </div>
+            <div className='flex justify-between items-center gap-4'>
+              <div className='space-y-2 mt-2'>
+                <label
+                  className='text-xs sm:text-sm lg:text-base'
+                  htmlFor='invoice date'
+                >
+                  Invoice Date
+                </label>
+                <DatePick />
+              </div>
+              <div className='mt-2 space-y-2'>
+                <label
+                  className='text-xs sm:text-sm lg:text-base'
+                  htmlFor='invoice date'
+                >
+                  Payment Terms
+                </label>
+                <FormRow name='payment' />
+              </div>
+            </div>
+            <FormRow label='Project Description' name='project' />
+            <p className='text-xl'>Item List</p>
+            <ItemListField />
+          </motion.form>
+        </FormProvider>
       </motion.aside>
     </section>
   )

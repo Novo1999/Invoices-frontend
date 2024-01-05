@@ -1,15 +1,10 @@
 import { motion } from 'framer-motion'
-import { useForm } from 'react-hook-form'
 import { emailRegex } from '../utils/constants.js'
+import PaymentTerms from './PaymentTerms.jsx'
+import { useFormContext } from 'react-hook-form'
 
 const FormRow = ({ label, name, className, type }) => {
-  const {
-    register,
-    watch,
-    formState: { errors },
-  } = useForm()
-  console.log(errors)
-
+  const { register } = useFormContext()
   const setValidationProperties = (name) => {
     let validation = { required: true }
     if (name === 'name') {
@@ -38,20 +33,27 @@ const FormRow = ({ label, name, className, type }) => {
     },
   }
 
-  return (
-    <motion.fieldset
-      className={`flex flex-col gap-4 ${className} mt-2`}
-      variants={variants}
-    >
-      <label className='text-xs sm:text-sm lg:text-base' htmlFor={label}>
-        {label}
-      </label>
-      <input
-        className={`input  input-bordered w-full max-w-full`}
-        type={type === 'number' ? 'number' : 'text'}
-        {...register(name, setValidationProperties(name))}
-      />
-    </motion.fieldset>
-  )
+  let formRow = null
+  if (name === 'payment') {
+    formRow = <PaymentTerms />
+  } else {
+    formRow = (
+      <motion.fieldset
+        className={`flex flex-col gap-4 ${className} mt-2 `}
+        variants={variants}
+      >
+        <label className='text-xs sm:text-sm lg:text-base' htmlFor={label}>
+          {label}
+        </label>
+        <input
+          className={`input input-bordered w-full max-w-full`}
+          type={type === 'number' ? 'number' : 'text'}
+          {...register(name, setValidationProperties(name))}
+        />
+      </motion.fieldset>
+    )
+  }
+
+  return formRow
 }
 export default FormRow
