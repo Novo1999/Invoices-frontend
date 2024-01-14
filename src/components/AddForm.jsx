@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useSelector } from 'react-redux'
 import DatePick from './DatePicker'
@@ -8,20 +8,22 @@ import ItemListField from './ItemListField'
 import Overlay from './Overlay'
 import useWindowDimensions from '../hooks/useWindowDimensions'
 import { setFormWidth } from '../utils/setFormWidth'
+import moment from 'moment'
+import { useAddInvoiceMutation } from '../features/invoicesApi/invoicesApi.js'
+import { makeId } from '../utils/idMaker.js'
 
 const AddForm = () => {
+  const { date } = useSelector((state) => state.date)
+  const [addInvoice] = useAddInvoiceMutation()
   const { sidebarOpen } = useSelector((state) => state.sidebar)
   const [delayedClass, setDelayedClass] = useState('')
   const { width } = useWindowDimensions()
   const methods = useForm({
     defaultValues: {
-      itemList: [{ itemName: '', quantity: '', price: '' }],
+      itemList: [{ id: '', itemName: '', quantity: '', price: '' }],
     },
   })
 
-  console.log(methods.watch())
-
-  const sidebarRef = useRef(null)
   useEffect(() => {
     // Set a timeout to apply the delayed class after 1 second
     const timeoutId = setTimeout(
@@ -67,21 +69,25 @@ const AddForm = () => {
   }, [sidebarOpen])
 
   const onSubmit = (data) => {
-    console.log(data)
+    // adding the id from the invoices to the order array after adding an invoice
+    addInvoice({
+      ...data,
+      date: moment(date).format('DD MMMM YYYY'),
+      id: `#${makeId(6)}`,
+    })
   }
 
   return (
-    <section className=''>
+    <section>
       <Overlay />
       <motion.aside
         initial={false}
         animate={sidebarOpen ? 'open' : 'closed'}
-        ref={sidebarRef}
-        className={`absolute top-0 bg-slate-800 rounded-r-lg text-white ${delayedClass} min-h-full overflow-y-auto form-input`}
+        className={`absolute top-0 bg-slate-800 rounded-r-lg text-white ${delayedClass} min-h-full form-input`}
       >
         <FormProvider {...methods}>
           <motion.form
-            className='h-full space-y-2 text-xs '
+            className='h-full space-y-2 text-xs overflow-y-auto scrollbar-hide'
             initial='closed'
             animate={sidebarOpen ? 'open' : 'closed'}
             variants={sidebar}
@@ -129,8 +135,11 @@ const AddForm = () => {
               </div>
             </div>
             <FormRow label='Project Description' name='project' />
-            <p className='text-xl'>Item List</p>
+            <p className='text-2xl font-semibold'>Item List</p>
             <ItemListField />
+            <div className='flex justify-center'>
+              <input className='btn' type='submit' />
+            </div>
           </motion.form>
         </FormProvider>
       </motion.aside>

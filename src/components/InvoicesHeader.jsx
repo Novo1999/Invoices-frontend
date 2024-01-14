@@ -3,7 +3,7 @@ import { MdAddCircle } from 'react-icons/md'
 import { useDispatch, useSelector } from 'react-redux'
 import { useGetInvoicesQuery } from '../features/invoicesApi/invoicesApi.js'
 import { open } from '../features/sidebar/sidebarSlice'
-import { filter } from '../features/filter/filterSlice.js'
+import Select from './Select.jsx'
 
 const InvoicesHeader = () => {
   const { filterBy } = useSelector((state) => state.filter)
@@ -39,8 +39,8 @@ const InvoicesHeader = () => {
   }
   if (!isLoading && !isError && data.length > 0) {
     content = (
-      <>
-        <h1 className='text-center font-semibold text-xl'>Invoices</h1>
+      <div className='*:text-white'>
+        <h1 className='font-semibold text-xl'>Invoices</h1>
         <p className='block sm:hidden'>
           {filteredInvoicesCount || data?.length} {filterBy}{' '}
           {filterBy === '' && 'total'} invoices
@@ -49,29 +49,19 @@ const InvoicesHeader = () => {
           There are {filteredInvoicesCount || data?.length} total
           {' ' + filterBy} invoices
         </p>
-      </>
+      </div>
     )
   }
 
   return (
-    <div className='flex gap-4 mt-4 mx-4 justify-between md:ml-10 lg:ml-5 xl:ml-12'>
-      <div className='flex flex-col items-start  sm:w-52'>{content}</div>
-      <div className='flex gap-6'>
-        <select
-          className='select select-bordered w-full max-w-xs'
-          name='status'
-          defaultValue={filterBy}
-          onChange={(e) => dispatch(filter(e.target.value))}
-        >
-          <option value=''>Filter By Status</option>
-          <option value='draft'>Draft</option>
-          <option value='pending'>Pending</option>
-          <option value='paid'>Paid</option>
-        </select>
+    <div className='flex gap-4 items-center mt-4 mx-4 justify-between md:ml-10 lg:ml-5 xl:ml-7 font-poppins'>
+      <div className='flex flex-col items-start sm:w-52'>{content}</div>
+      <div className='flex gap-6 flex-col sm:flex-row'>
+        <Select />
         {/* add new invoice */}
         <button
           onClick={() => dispatch(open())}
-          className='btn rounded-full bg-purple-600 text-white hover:bg-purple-800'
+          className='btn rounded-full bg-gradient-to-r from-rose-700 to-pink-600 text-white '
         >
           <span className='border border-white rounded-full p-1 text-lg'>
             <MdAddCircle />

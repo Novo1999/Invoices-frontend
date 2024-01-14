@@ -46,7 +46,9 @@ const SingleInvoice = () => {
   }
 
   return (
-    <main className='flex flex-col gap-6 h-dvh xl:items-center'>{content}</main>
+    <main className='flex flex-col gap-6 h-dvh xl:items-center '>
+      {content}
+    </main>
   )
 }
 export default SingleInvoice

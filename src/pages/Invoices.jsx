@@ -9,7 +9,7 @@ import {
   useReorderInvoicesMutation,
 } from '../features/invoicesApi/invoicesApi.js'
 import useWindowDimensions from '../hooks/useWindowDimensions'
-import debouncedReorder from '../utils/deboouncedReorder.js'
+import debouncedReorder from '../utils/debouncedReorder.js'
 import { useSelector } from 'react-redux'
 import { filterByStatus } from '../utils/filterByStatus.js'
 
@@ -52,7 +52,7 @@ const Invoices = () => {
   useEffect(() => {
     if (isSuccess) {
       setItems((current) =>
-        invoicesOrder.order?.map((id) => {
+        invoicesOrder?.order.map((id) => {
           return current.find((item) => item.id === id)
         })
       )
@@ -77,9 +77,9 @@ const Invoices = () => {
   let content = null
 
   if (isLoading || isLoadingOrder) {
-    content = Array.from({ length: 10 }, (_, i) => i).map((_) => (
+    content = Array.from({ length: 10 }, (_, i) => i).map((_, index) => (
       <div
-        key={crypto.randomUUID()}
+        key={index}
         className='flex flex-col gap-4 w-full items-center justify-center mt-12'
       >
         <div className='skeleton h-4 w-full'></div>
@@ -104,7 +104,7 @@ const Invoices = () => {
     data.length === 0
   ) {
     content = (
-      <div className='stack flex justify-center mt-10 relative z-0 sm:ml-8 lg:right-4 xl:ml-16'>
+      <div className='stack flex justify-center mt-10 relative z-0 sm:ml-8 lg:right-4 xl:ml-16 '>
         <div className='card shadow-md bg-primary text-primary-content'>
           <div className='card-body'>
             <h2 className='card-title'>You have no invoices</h2>
@@ -141,7 +141,7 @@ const Invoices = () => {
 
   return (
     // invoice parent
-    <main className='min-[425px]:w-96 min-[425px]:ml-5 sm:w-[40rem] sm:ml-24 lg:w-fit lg:ml-52 xl:m-auto xl:px-20 pb-12'>
+    <main className='min-[425px]:w-96 min-[425px]:ml-5 sm:w-[40rem] sm:ml-24 lg:w-fit lg:ml-52 xl:m-auto xl:px-20 pb-12 relative'>
       <InvoicesHeader />
       {content}
     </main>

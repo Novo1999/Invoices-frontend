@@ -1,17 +1,24 @@
-import { useState } from 'react'
-import Datepicker from 'react-tailwindcss-datepicker'
+import { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
+import DatePicker from 'react-tailwindcss-datepicker'
+import { setDate } from '../features/date/dateSlice.js'
 
 const DatePick = () => {
   const [value, setValue] = useState(new Date())
-
+  const dispatch = useDispatch()
   const handleValueChange = (newValue) => {
-    console.log('newValue:', newValue)
     setValue(newValue)
   }
 
+  useEffect(() => {
+    if (value) {
+      dispatch(setDate(value.startDate))
+    }
+  }, [dispatch, value])
+
   return (
     <div>
-      <Datepicker
+      <DatePicker
         inputClassName='bg-indigo-900 h-12 w-48 text-lg border-2 border-indigo-400 p-4 rounded-lg text-white'
         primaryColor='indigo'
         placeholder='Invoice Date'

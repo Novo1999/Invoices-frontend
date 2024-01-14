@@ -10,7 +10,7 @@ const InvoiceItem = ({ isDragging, invoice, setIsDragging }) => {
   const { _id, id, name, due, amount, status } = invoice || {}
   return (
     <Reorder.Item
-      className='grid grid-cols-2 mx-4 xl:ml-12 mt-4 bg-[#3b82f6] md:ml-10 lg:ml-5 p-4 rounded-lg shadow-lg items-center'
+      className='grid grid-cols-2 mx-4 mt-4 bg-gradient-to-r from-sky-400 to-cyan-300 lg:ml-5 font-poppins font-bold p-4 rounded-lg shadow-lg items-center w-fit sm:w-[38rem] lg:w-[43rem]'
       dragListener={isDragging}
       onDragStart={() => width < 768 && setIsDragging(true)}
       onDragEnd={() => width < 768 && setIsDragging(false)}
@@ -18,8 +18,8 @@ const InvoiceItem = ({ isDragging, invoice, setIsDragging }) => {
     >
       <div className='space-y-2 sm:grid sm:grid-cols-3 items-center'>
         <div>
-          <span className='text-gray-200'># </span>
-          <span className='font-bold'>{id}</span>
+          <span className='text-gray-200'>{id[0]}</span>
+          <span className='font-bold'>{id.slice(1)}</span>
         </div>
         <p className='lg:col-span-1 text-xs'>Due {due}</p>
         <p className='block sm:hidden font-semibold'>$ {amount}</p>
@@ -44,7 +44,7 @@ const InvoiceItem = ({ isDragging, invoice, setIsDragging }) => {
         <span
           onTouchStart={() => filterBy === '' && setIsDragging(true)}
           style={{ touchAction: 'none' }}
-          className='absolute right-[150px] lg:right-[170px] hidden sm:block cursor-grab'
+          className='absolute right-[165px] lg:right-[170px] xl:right-[170px] 2xl:right-42 hidden sm:block cursor-grab'
         >
           <GrDrag />
         </span>

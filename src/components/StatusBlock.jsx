@@ -1,17 +1,31 @@
 /* eslint-disable react/prop-types */
 import { PAID, PENDING, DRAFT } from '../utils/constants.js'
-import { useParams } from 'react-router-dom'
-import { useChangeInvoiceStatusMutation } from '../features/invoicesApi/invoicesApi.js'
+import { useNavigate, useParams } from 'react-router-dom'
+import {
+  useChangeInvoiceStatusMutation,
+  useDeleteInvoiceMutation,
+} from '../features/invoicesApi/invoicesApi.js'
 import ResButton from './ResButton'
 import Status from './Status'
+import { useDispatch } from 'react-redux'
+import api from '../features/api/apiSlice.js'
 
 const StatusBlock = ({ invoice }) => {
-  const { status } = invoice
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const { status, id } = invoice
   const [changeInvoiceStatus] = useChangeInvoiceStatusMutation()
-  const { id } = useParams()
+  const { id: routeId } = useParams()
+  const [deleteInvoice] = useDeleteInvoiceMutation()
 
-  const handleInvoiceStatus = (status) => {
-    changeInvoiceStatus({ id, data: { status } })
+  const handleDelete = async () => {
+    await deleteInvoice({ _id: routeId, id })
+    dispatch(api.endpoints.deleteOrder.initiate({ data: { id } }))
+    navigate('/')
+  }
+
+  const handleInvoiceStatus = async (status) => {
+    changeInvoiceStatus({ id: routeId, data: { status } })
   }
 
   let button = null
@@ -84,7 +98,9 @@ const StatusBlock = ({ invoice }) => {
       </div>
       <div className='flex justify-between sm:justify-end sm:gap-4'>
         <ResButton type='edit'>Edit</ResButton>
-        <ResButton type='delete'>Delete</ResButton>
+        <ResButton onClick={handleDelete} type='delete'>
+          Delete
+        </ResButton>
         {button}
       </div>
     </section>

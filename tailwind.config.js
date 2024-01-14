@@ -6,9 +6,13 @@ export default {
     './node_modules/react-tailwindcss-datepicker/dist/index.esm.js',
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        poppins: ['Poppins', 'sans-serif'],
+      },
+    },
   },
-  plugins: [require('daisyui')],
+  plugins: [require('daisyui'), require('tailwind-scrollbar-hide')],
   daisyui: {
     themes: ['light', 'black'],
   },

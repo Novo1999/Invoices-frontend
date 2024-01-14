@@ -23,7 +23,7 @@ const InvoiceDetails = ({ invoice }) => {
     <main className='max-w-full xl:max-w-fit flex justify-center p-4 rounded-lg relative shadow-lg flex-col invoice-details sm:ml-20'>
       <div className='flex justify-between text-sm lg:text-lg w-full'>
         <div>
-          <h4># {id}</h4>
+          <h4 className='font-semibold'>{id}</h4>
           <p>{project}</p>
         </div>
         <div className='text-end space-y-1'>
@@ -63,7 +63,7 @@ const InvoiceDetails = ({ invoice }) => {
           <p>Total</p>
         </div>
         {items.map((item) => (
-          <ItemRow key={item.id} item={item} />
+          <ItemRow key={item?.id} item={item} />
         ))}
       </section>
       <div className='flex justify-around h-40 lg:text-lg items-center bg-indigo-900 rounded-b-xl '>

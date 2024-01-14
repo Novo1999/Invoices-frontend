@@ -2,53 +2,70 @@ import { RiDeleteBin7Fill } from 'react-icons/ri'
 import { FiPlusSquare } from 'react-icons/fi'
 import ItemListHeader from './ItemListHeader.jsx'
 import { useFieldArray, useFormContext } from 'react-hook-form'
+import ItemListFieldRow from './ItemListFieldRow.jsx'
 
 const ItemListField = () => {
-  const { register, control } = useFormContext()
+  const { register, control, watch } = useFormContext()
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'itemList',
   })
 
+  const formFields = watch().itemList
+
+  // check if last field has value and render the add new item button only if it does
+  const lastField = formFields[formFields.length - 1] || {}
+  let lastFieldHasValue = null
+  if (
+    lastField?.itemName?.length > 0 &&
+    lastField?.quantity &&
+    lastField?.price
+  ) {
+    lastFieldHasValue = true
+  }
   const handleAppend = () => {
     append()
+    // scroll to the bottom right after new field is added
     const formContainer = document.querySelector('.form-input')
     setTimeout(() => {
-      formContainer.scrollTo(0, formContainer.scrollHeight)
+      formContainer.scrollTo({
+        bottom: 0,
+        top: formContainer.scrollHeight,
+        behavior: 'smooth',
+      })
     }, 50)
   }
-
   return (
     <div className='space-y-2'>
       <ItemListHeader fieldsLength={fields.length} />
       {fields.map((item, index) => (
         <li
-          className='grid grid-cols-3 lg:grid-cols-6 gap-2 items-center justify-center'
+          className='grid grid-cols-3 lg:grid-cols-6 gap-2 items-center justify-center pb-6'
           key={item.id}
         >
-          <fieldset className='flex flex-col col-span-2 gap-4 mt-2'>
-            <input
-              className='input input-bordered w-full max-w-full'
-              {...register(`itemList.${index}.itemName`)}
-              type='text'
-            />
-          </fieldset>
-          <fieldset className='flex flex-col gap-4 mt-2'>
-            <input
-              className='input input-bordered w-full max-w-full'
-              {...register(`itemList.${index}.quantity`)}
-              type='number'
-            />
-          </fieldset>
-          <fieldset className='flex flex-col gap-4 mt-2'>
-            <input
-              className='input input-bordered w-full max-w-full'
-              {...register(`itemList.${index}.price`)}
-              type='number'
-            />
-          </fieldset>
-          <p className='hidden lg:block text-lg text-center mt-2 mb'>$ 156.5</p>
-          <p className='text-lg block text-center lg:hidden'>Total: $ 156.5</p>
+          <ItemListFieldRow
+            register={register}
+            index={index}
+            inputName='itemName'
+            className='col-span-2'
+          />
+          <ItemListFieldRow
+            register={register}
+            index={index}
+            inputName='quantity'
+          />
+          <ItemListFieldRow
+            register={register}
+            index={index}
+            inputName='price'
+          />
+          <p className='hidden lg:block text-lg text-center mt-2 mb'>
+            $ {formFields[index]?.quantity * formFields[index]?.price || 0}
+          </p>
+          <p className='text-lg block text-center lg:hidden'>
+            Total: ${' '}
+            {formFields[index]?.quantity * formFields[index]?.price || 0}
+          </p>
           {index !== 0 && (
             <button
               onClick={() => remove(index)}
@@ -61,21 +78,25 @@ const ItemListField = () => {
         </li>
       ))}
 
-      <button
-        type='button'
-        onClick={handleAppend}
-        className='sm:hidden btn hover:bg-slate-300 hover:text-black text-white btn-square btn-outline w-full text-lg lg:text-xl'
-      >
-        <FiPlusSquare /> <span>Add</span>
-        <span className='hidden lg:block'>new Item</span>
-      </button>
-      <button
-        type='button'
-        onClick={handleAppend}
-        className='hidden hover:bg-slate-300 hover:text-black sm:flex rounded-full btn text-white btn-square btn-outline w-full text-lg lg:text-xl'
-      >
-        <FiPlusSquare /> Add New Item
-      </button>
+      {lastFieldHasValue && (
+        <>
+          <button
+            type='button'
+            onClick={handleAppend}
+            className='sm:hidden btn hover:bg-slate-300 hover:text-black text-white btn-square btn-outline w-full text-lg lg:text-xl'
+          >
+            <FiPlusSquare /> <span>Add</span>
+            <span className='hidden lg:block'>new Item</span>
+          </button>
+          <button
+            type='button'
+            onClick={handleAppend}
+            className='hidden hover:bg-slate-300 hover:text-black sm:flex rounded-full btn text-white btn-square btn-outline w-full text-lg lg:text-xl'
+          >
+            <FiPlusSquare /> Add New Item
+          </button>
+        </>
+      )}
     </div>
   )
 }

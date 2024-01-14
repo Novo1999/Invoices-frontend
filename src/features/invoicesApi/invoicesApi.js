@@ -12,15 +12,26 @@ const invoicesApi = invoiceApi.injectEndpoints({
         body: data,
       }),
       async onQueryStarted(data, { dispatch, queryFulfilled }) {
-        const postResult = dispatch(
+        const postResult1 = dispatch(
           invoiceApi.util.updateQueryData('getInvoices', undefined, (draft) => {
             draft.push(data)
           })
         )
+        const postResult2 = dispatch(
+          invoiceApi.util.updateQueryData(
+            'getOrdersOfInvoices',
+            undefined,
+            (draft) => {
+              draft.push(data.id)
+            }
+          )
+        )
+        dispatch(invoiceApi.endpoints.addOrder.initiate({ data: data.id }))
         try {
           await queryFulfilled
         } catch (error) {
-          postResult.undo()
+          postResult1.undo()
+          postResult2.undo()
         }
       },
     }),
@@ -34,8 +45,54 @@ const invoicesApi = invoiceApi.injectEndpoints({
     getOrdersOfInvoices: builder.query({
       query: () => '/order',
     }),
+    addOrder: builder.mutation({
+      query: (data) => ({
+        url: '/order',
+        method: 'POST',
+        body: data,
+      }),
+    }),
     getInvoice: builder.query({
       query: (id) => `/protected/${id}`,
+    }),
+    deleteInvoice: builder.mutation({
+      query: ({ _id, id }) => ({
+        url: `/protected/${_id}`,
+        method: 'DELETE',
+      }),
+      async onQueryStarted({ _id, id }, { dispatch, queryFulfilled }) {
+        const deleteResult1 = dispatch(
+          invoiceApi.util.updateQueryData('getInvoices', undefined, (draft) => {
+            return draft.filter((item) => item._id !== _id)
+          })
+        )
+        const deleteResult2 = dispatch(
+          invoiceApi.util.updateQueryData(
+            'getOrdersOfInvoices',
+            undefined,
+            (draft) => {
+              const indexToRemove = draft.order.findIndex(
+                (value) => value === id
+              )
+              draft.order.splice(indexToRemove, 1)
+              return draft
+            }
+          )
+        )
+        try {
+          await queryFulfilled
+        } catch (error) {
+          deleteResult1.undo()
+          deleteResult2.undo()
+        }
+      },
+    }),
+    deleteOrder: builder.mutation({
+      query: (data) => ({
+        url: `/order`,
+        method: 'PATCH',
+        body: data,
+      }),
     }),
     changeInvoiceStatus: builder.mutation({
       query: ({ id, data }) => ({
@@ -54,7 +111,6 @@ const invoicesApi = invoiceApi.injectEndpoints({
             })
           })
         )
-
         try {
           await queryFulfilled
         } catch (error) {
@@ -71,5 +127,7 @@ export const {
   useGetOrdersOfInvoicesQuery,
   useReorderInvoicesMutation,
   useChangeInvoiceStatusMutation,
+  useAddOrderMutation,
   useGetInvoiceQuery,
+  useDeleteInvoiceMutation,
 } = invoicesApi
