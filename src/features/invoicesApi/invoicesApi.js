@@ -2,9 +2,11 @@ import invoiceApi from '../api/apiSlice.js'
 
 const invoicesApi = invoiceApi.injectEndpoints({
   endpoints: (builder) => ({
+    // GET INVOICES
     getInvoices: builder.query({
       query: () => '/protected',
     }),
+    // ADD INVOICES
     addInvoice: builder.mutation({
       query: (data) => ({
         url: '/protected/',
@@ -35,6 +37,7 @@ const invoicesApi = invoiceApi.injectEndpoints({
         }
       },
     }),
+    // REORDER
     reorderInvoices: builder.mutation({
       query: (order) => ({
         url: '/order',
@@ -42,9 +45,11 @@ const invoicesApi = invoiceApi.injectEndpoints({
         body: order,
       }),
     }),
+    // GET ORDERS
     getOrdersOfInvoices: builder.query({
       query: () => '/order',
     }),
+    // ADD ORDER
     addOrder: builder.mutation({
       query: (data) => ({
         url: '/order',
@@ -52,9 +57,11 @@ const invoicesApi = invoiceApi.injectEndpoints({
         body: data,
       }),
     }),
+    // GET INVOICE
     getInvoice: builder.query({
       query: (id) => `/protected/${id}`,
     }),
+    // DELETE INVOICE
     deleteInvoice: builder.mutation({
       query: ({ _id, id }) => ({
         url: `/protected/${_id}`,
@@ -87,13 +94,15 @@ const invoicesApi = invoiceApi.injectEndpoints({
         }
       },
     }),
+    // DELETE ORDER
     deleteOrder: builder.mutation({
-      query: (data) => ({
+      query: (id) => ({
         url: `/order`,
-        method: 'PATCH',
-        body: data,
+        method: 'PUT',
+        body: id,
       }),
     }),
+    // CHANGE INVOICE STATUS
     changeInvoiceStatus: builder.mutation({
       query: ({ id, data }) => ({
         url: `/protected/mark/${id}`,

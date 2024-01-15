@@ -15,7 +15,12 @@ import { filterByStatus } from '../utils/filterByStatus.js'
 
 const Invoices = () => {
   const { filterBy } = useSelector((state) => state.filter)
-  const { data, isLoading, isError, error } = useGetInvoicesQuery(undefined, {
+  const {
+    data: invoices,
+    isLoading,
+    isError,
+    error,
+  } = useGetInvoicesQuery(undefined, {
     refetchOnMountOrArgChange: true,
   })
   const {
@@ -41,13 +46,17 @@ const Invoices = () => {
 
   // set items when no loading or error state on mount
   useEffect(() => {
-    if (!isLoading && !isError) setItems(data)
-  }, [data, isLoading, isError])
+    if (!isLoading && !isError) {
+      setItems(invoices)
+    }
+  }, [invoices, isLoading, isError])
 
   useEffect(() => {
     // let the user drag when they are on pc
     if (width > 768) setIsDragging(true)
   }, [width])
+
+  console.log(items)
 
   useEffect(() => {
     if (isSuccess) {
@@ -101,7 +110,7 @@ const Invoices = () => {
     !isError &&
     !isOrderError &&
     isSuccess &&
-    data.length === 0
+    invoices.length === 0
   ) {
     content = (
       <div className='stack flex justify-center mt-10 relative z-0 sm:ml-8 lg:right-4 xl:ml-16 '>
@@ -114,7 +123,13 @@ const Invoices = () => {
       </div>
     )
   }
-  if (!isLoading && !isError && !isOrderError && isSuccess && data.length > 0) {
+  if (
+    !isLoading &&
+    !isError &&
+    !isOrderError &&
+    isSuccess &&
+    invoices.length > 0
+  ) {
     content = (
       <Reorder.Group
         axis='y'

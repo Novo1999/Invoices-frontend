@@ -20,7 +20,7 @@ const StatusBlock = ({ invoice }) => {
 
   const handleDelete = async () => {
     await deleteInvoice({ _id: routeId, id })
-    dispatch(api.endpoints.deleteOrder.initiate({ data: { id } }))
+    dispatch(api.endpoints.deleteOrder.initiate({ id }))
     navigate('/')
   }
 
