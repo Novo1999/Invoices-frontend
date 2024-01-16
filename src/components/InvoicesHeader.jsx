@@ -45,10 +45,17 @@ const InvoicesHeader = () => {
           {filteredInvoicesCount || data?.length} {filterBy}{' '}
           {filterBy === '' && 'total'} invoices
         </p>
-        <p className='hidden sm:block'>
-          There are {filteredInvoicesCount || data?.length} total
-          {' ' + filterBy} invoices
-        </p>
+        {filterBy !== '' && (
+          <p className='hidden sm:block'>
+            There are {filteredInvoicesCount} total
+            {' ' + filterBy} invoices
+          </p>
+        )}
+        {filterBy === '' && (
+          <p className='hidden sm:block'>
+            There are {data?.length} total invoices
+          </p>
+        )}
       </div>
     )
   }
@@ -57,7 +64,7 @@ const InvoicesHeader = () => {
     <div className='flex gap-4 items-center mt-4 mx-4 justify-between md:ml-10 lg:ml-5 xl:ml-7 font-poppins'>
       <div className='flex flex-col items-start sm:w-52'>{content}</div>
       <div className='flex gap-6 flex-col sm:flex-row'>
-        <Select />
+        {data?.length > 0 && <Select />}
         {/* add new invoice */}
         <button
           onClick={() => dispatch(open())}

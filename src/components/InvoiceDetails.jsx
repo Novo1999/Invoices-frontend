@@ -20,7 +20,7 @@ const InvoiceDetails = ({ invoice }) => {
   } = invoice
 
   return (
-    <main className='max-w-full xl:max-w-fit flex justify-center p-4 rounded-lg relative shadow-lg flex-col invoice-details sm:ml-20'>
+    <main className='max-w-full xl:max-w-fit flex justify-center p-4 rounded-lg relative shadow-lg flex-col invoice-details sm:ml-20 bg-white'>
       <div className='flex justify-between text-sm lg:text-lg w-full'>
         <div>
           <h4 className='font-semibold'>{id}</h4>

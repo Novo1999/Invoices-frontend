@@ -50,14 +50,14 @@ const Invoices = () => {
   }, [invoices, isLoading, isError])
 
   useEffect(() => {
-    if (isSuccess) {
+    if (isSuccess && !isOrderError) {
       setItems((current) =>
         invoicesOrder?.order.map((id) => {
           return current.find((item) => item.id === id)
         })
       )
     }
-  }, [isSuccess, invoicesOrder])
+  }, [isSuccess, invoicesOrder, isOrderError])
 
   // this reorders the invoices
   const handleReorder = (reorderedIds) => {
@@ -95,7 +95,6 @@ const Invoices = () => {
       </div>
     )
   }
-
   if (
     !isLoading &&
     !isError &&
@@ -114,18 +113,17 @@ const Invoices = () => {
       </div>
     )
   }
-  console.log(items)
   if (
     !isLoading &&
     !isError &&
-    !isOrderError &&
     isSuccess &&
+    !isOrderError &&
     invoices.length > 0
   ) {
     content = (
       <Reorder.Group
         axis='y'
-        values={items.map((item) => item.id)} //passing the value of ids in an array so they are unique and reordering can happen
+        values={items.map((item) => item?.id)} //passing the value of ids in an array so they are unique and reordering can happen
         onReorder={handleReorder}
         layoutScroll
       >

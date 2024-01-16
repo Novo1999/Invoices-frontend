@@ -1,3 +1,4 @@
+import { SignedIn, SignedOut } from '@clerk/clerk-react'
 import { Provider } from 'react-redux'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import store from './app/store'
@@ -5,8 +6,8 @@ import EditInvoice from './pages/EditInvoice'
 import Error from './pages/ErrorPage'
 import Invoices from './pages/Invoices'
 import Layout from './pages/Layout'
+import Login from './pages/Login.jsx'
 import SingleInvoice from './pages/SingleInvoice'
-import { RedirectToSignIn, SignedIn, SignedOut } from '@clerk/clerk-react'
 
 const router = createBrowserRouter([
   {
@@ -28,13 +29,17 @@ const router = createBrowserRouter([
       },
     ],
   },
+  {
+    path: '/login',
+    element: <Login />,
+  },
 ])
 
 function App() {
   return (
     <Provider store={store}>
       <SignedOut>
-        <RedirectToSignIn />
+        <Login />
       </SignedOut>
       <SignedIn>
         <RouterProvider router={router} />

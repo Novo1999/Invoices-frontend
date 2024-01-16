@@ -26,7 +26,7 @@ const Sidebar = () => {
             <DarkModeSwap />
           </span>
           <div className='absolute right-12 w-[1px] h-full bg-white sm:hidden'></div>
-          <UserButton />
+          <UserButton afterSignOutUrl='/login' />
           <div className='bg-red-500 text-white w-fit p-4 rounded-full btn btn-error hover:bg-red-600 btn-xs place-content-center hidden sm:h-12 sm:flex whitespace-nowrap'>
             <SignOutButton />
           </div>
