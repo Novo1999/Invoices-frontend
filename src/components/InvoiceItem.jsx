@@ -1,19 +1,15 @@
 import { Reorder } from 'framer-motion'
 import { GrDrag } from 'react-icons/gr'
-import Status from './Status.jsx'
-import useWindowDimensions from '../hooks/useWindowDimensions.js'
 import { useSelector } from 'react-redux'
+import Status from './Status.jsx'
 
 const InvoiceItem = ({ isDragging, invoice, setIsDragging }) => {
   const { filterBy } = useSelector((state) => state.filter)
-  const { width } = useWindowDimensions()
   const { _id, id, name, due, amount, status } = invoice || {}
   return (
     <Reorder.Item
       className='grid grid-cols-2 mx-4 mt-4 bg-gradient-to-r from-sky-400 to-cyan-300 lg:ml-5 font-poppins font-bold p-4 rounded-lg shadow-lg items-center w-fit sm:w-[38rem] lg:w-[43rem]'
       dragListener={isDragging}
-      onDragStart={() => width < 768 && setIsDragging(true)}
-      onDragEnd={() => width < 768 && setIsDragging(false)}
       value={id}
     >
       <div className='space-y-2 sm:grid sm:grid-cols-3 items-center'>

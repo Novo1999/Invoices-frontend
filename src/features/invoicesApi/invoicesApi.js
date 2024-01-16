@@ -6,64 +6,13 @@ const invoicesApi = invoiceApi.injectEndpoints({
     getInvoices: builder.query({
       query: () => '/protected',
     }),
-    // ADD INVOICES
-    addInvoice: builder.mutation({
-      query: (data) => ({
-        url: '/protected/',
-        method: 'POST',
-        body: data,
-      }),
-      async onQueryStarted(data, { dispatch, queryFulfilled }) {
-        const postResult1 = dispatch(
-          invoiceApi.util.updateQueryData('getInvoices', undefined, (draft) => {
-            draft.push(data)
-          })
-        )
-        const postResult2 = dispatch(
-          invoiceApi.util.updateQueryData(
-            'getOrdersOfInvoices',
-            undefined,
-            (draft) => {
-              draft.push(data.id)
-            }
-          )
-        )
-        dispatch(invoiceApi.endpoints.addOrder.initiate({ data: data.id }))
-        try {
-          await queryFulfilled
-        } catch (error) {
-          postResult1.undo()
-          postResult2.undo()
-        }
-      },
-    }),
-    // REORDER
-    reorderInvoices: builder.mutation({
-      query: (order) => ({
-        url: '/order',
-        method: 'PATCH',
-        body: order,
-      }),
-    }),
-    // GET ORDERS
-    getOrdersOfInvoices: builder.query({
-      query: () => '/order',
-    }),
-    // ADD ORDER
-    addOrder: builder.mutation({
-      query: (data) => ({
-        url: '/order',
-        method: 'POST',
-        body: data,
-      }),
-    }),
     // GET INVOICE
     getInvoice: builder.query({
       query: (id) => `/protected/${id}`,
     }),
     // DELETE INVOICE
     deleteInvoice: builder.mutation({
-      query: ({ _id, id }) => ({
+      query: ({ _id }) => ({
         url: `/protected/${_id}`,
         method: 'DELETE',
       }),
@@ -94,13 +43,43 @@ const invoicesApi = invoiceApi.injectEndpoints({
         }
       },
     }),
-    // DELETE ORDER
-    deleteOrder: builder.mutation({
-      query: (id) => ({
-        url: `/order`,
-        method: 'PUT',
-        body: id,
+    // ADD INVOICES
+    addInvoice: builder.mutation({
+      query: (data) => ({
+        url: '/protected/',
+        method: 'POST',
+        body: data,
       }),
+      async onQueryStarted(data, { dispatch, queryFulfilled }) {
+        const postResult1 = dispatch(
+          invoiceApi.util.updateQueryData('getInvoices', undefined, (draft) => {
+            const { itemList } = data
+            const updatedCacheData = {
+              ...data,
+              status: 'draft',
+              amount: itemList.reduce((acc, curr) => {
+                return acc + curr.price * curr.quantity
+              }, 0),
+            }
+            draft.push(updatedCacheData)
+          })
+        )
+        const postResult2 = dispatch(
+          invoiceApi.util.updateQueryData(
+            'getOrdersOfInvoices',
+            undefined,
+            (draft) => {
+              draft.order.push(data.id)
+            }
+          )
+        )
+        try {
+          await queryFulfilled
+        } catch (error) {
+          postResult1.undo()
+          postResult2.undo()
+        }
+      },
     }),
     // CHANGE INVOICE STATUS
     changeInvoiceStatus: builder.mutation({
@@ -126,6 +105,34 @@ const invoicesApi = invoiceApi.injectEndpoints({
           patchResult.undo()
         }
       },
+    }),
+    // REORDER
+    reorderInvoices: builder.mutation({
+      query: (order) => ({
+        url: '/order',
+        method: 'PATCH',
+        body: order,
+      }),
+    }),
+    // GET ORDERS
+    getOrdersOfInvoices: builder.query({
+      query: () => '/order',
+    }),
+    // ADD ORDER
+    addOrder: builder.mutation({
+      query: (data) => ({
+        url: '/order',
+        method: 'POST',
+        body: data,
+      }),
+    }),
+    // DELETE ORDER
+    deleteOrder: builder.mutation({
+      query: (id) => ({
+        url: `/order`,
+        method: 'PUT',
+        body: id,
+      }),
     }),
   }),
 })

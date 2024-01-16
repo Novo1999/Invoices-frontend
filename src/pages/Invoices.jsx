@@ -1,6 +1,7 @@
 import { Reorder } from 'framer-motion'
 import { useEffect, useState } from 'react'
 import { ImCross } from 'react-icons/im'
+import { useSelector } from 'react-redux'
 import InvoiceItem from '../components/InvoiceItem.jsx'
 import InvoicesHeader from '../components/InvoicesHeader'
 import {
@@ -8,9 +9,7 @@ import {
   useGetOrdersOfInvoicesQuery,
   useReorderInvoicesMutation,
 } from '../features/invoicesApi/invoicesApi.js'
-import useWindowDimensions from '../hooks/useWindowDimensions'
 import debouncedReorder from '../utils/debouncedReorder.js'
-import { useSelector } from 'react-redux'
 import { filterByStatus } from '../utils/filterByStatus.js'
 
 const Invoices = () => {
@@ -36,7 +35,6 @@ const Invoices = () => {
   const [items, setItems] = useState([])
   // setting dragListener to true for mobile
   const [isDragging, setIsDragging] = useState(false)
-  const { width } = useWindowDimensions()
 
   // prevent user from dragging the items when they filter by status
   useEffect(() => {
@@ -50,13 +48,6 @@ const Invoices = () => {
       setItems(invoices)
     }
   }, [invoices, isLoading, isError])
-
-  useEffect(() => {
-    // let the user drag when they are on pc
-    if (width > 768) setIsDragging(true)
-  }, [width])
-
-  console.log(items)
 
   useEffect(() => {
     if (isSuccess) {
@@ -123,6 +114,7 @@ const Invoices = () => {
       </div>
     )
   }
+  console.log(items)
   if (
     !isLoading &&
     !isError &&
@@ -133,7 +125,7 @@ const Invoices = () => {
     content = (
       <Reorder.Group
         axis='y'
-        values={items.map((item) => item?.id)} //passing the value of ids in an array so they are unique and dragging can happen
+        values={items.map((item) => item.id)} //passing the value of ids in an array so they are unique and reordering can happen
         onReorder={handleReorder}
         layoutScroll
       >
@@ -146,7 +138,7 @@ const Invoices = () => {
                 isDragging={isDragging}
                 invoice={invoice}
                 setIsDragging={setIsDragging}
-                key={invoice?.id || crypto.randomUUID()}
+                key={invoice.id}
               />
             )
           })}

@@ -1,23 +1,29 @@
 import { motion } from 'framer-motion'
+import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import {
+  useAddInvoiceMutation,
+  useAddOrderMutation,
+} from '../features/invoicesApi/invoicesApi.js'
+import useWindowDimensions from '../hooks/useWindowDimensions'
+import { makeId } from '../utils/idMaker.js'
+import { setFormWidth } from '../utils/setFormWidth'
 import DatePick from './DatePicker'
 import FormRow from './FormRow'
 import ItemListField from './ItemListField'
 import Overlay from './Overlay'
-import useWindowDimensions from '../hooks/useWindowDimensions'
-import { setFormWidth } from '../utils/setFormWidth'
-import moment from 'moment'
-import { useAddInvoiceMutation } from '../features/invoicesApi/invoicesApi.js'
-import { makeId } from '../utils/idMaker.js'
+import api from '../features/api/apiSlice.js'
 
 const AddForm = () => {
   const { date } = useSelector((state) => state.date)
   const [addInvoice] = useAddInvoiceMutation()
+  const [addOrder] = useAddOrderMutation()
   const { sidebarOpen } = useSelector((state) => state.sidebar)
   const [delayedClass, setDelayedClass] = useState('')
   const { width } = useWindowDimensions()
+  const dispatch = useDispatch()
   const methods = useForm({
     defaultValues: {
       itemList: [{ id: '', itemName: '', quantity: '', price: '' }],
@@ -75,6 +81,21 @@ const AddForm = () => {
       date: moment(date).format('DD MMMM YYYY'),
       id: `#${makeId(6)}`,
     })
+      .unwrap()
+      .then((payload) => {
+        addOrder({ data: payload.id }) // sending the new order ID after posting invoice
+        // injecting the _id in the new order
+        dispatch(
+          api.util.updateQueryData('getInvoices', undefined, (draft) => {
+            draft.map((invoice) => {
+              if (invoice.id === payload.id) {
+                invoice._id = payload._id
+              }
+              return invoice
+            })
+          })
+        )
+      })
   }
 
   return (
