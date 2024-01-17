@@ -10,6 +10,7 @@ import Status from './Status'
 import { useDispatch } from 'react-redux'
 import api from '../features/api/apiSlice.js'
 import { mode, open } from '../features/sidebar/sidebarSlice.js'
+import { setDate } from '../features/date/dateSlice.js'
 
 const StatusBlock = ({ invoice }) => {
   console.log(invoice)
@@ -19,6 +20,7 @@ const StatusBlock = ({ invoice }) => {
   const [changeInvoiceStatus] = useChangeInvoiceStatusMutation()
   const { id: routeId } = useParams()
   const [deleteInvoice] = useDeleteInvoiceMutation()
+  const { billFrom, billTo, due, project, email, name, invoiceDate } = invoice
 
   const handleDelete = async () => {
     await deleteInvoice({ _id: routeId, id })
@@ -30,11 +32,31 @@ const StatusBlock = ({ invoice }) => {
     changeInvoiceStatus({ id: routeId, data: { status } })
   }
 
+  console.log(invoiceDate.split('T')[0])
+
+  // getting data from the current invoice to place in the form
   const handleEdit = () => {
     dispatch(open())
     dispatch(
-      mode({ mode: 'edit', formValues: { street: invoice.billFrom.street } })
+      mode({
+        mode: 'edit',
+        formValues: {
+          street: billFrom.street,
+          fromCity: billFrom.city,
+          fromPostCode: billFrom.postCode,
+          fromCountry: billFrom.country,
+          name,
+          email,
+          clientStreet: billTo.street,
+          toCity: billTo.city,
+          toPostCode: billTo.postCode,
+          toCountry: billTo.country,
+          payment: due,
+          project,
+        },
+      })
     )
+    dispatch(setDate(invoiceDate.split('T')[0]))
   }
 
   let button = null

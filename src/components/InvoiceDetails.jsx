@@ -39,7 +39,7 @@ const InvoiceDetails = ({ invoice }) => {
             <p>Invoice Date</p>
             <h4>{invoiceDate}</h4>
             <p>Payment Due</p>
-            <h4>{due}</h4>
+            <h4>{due} days</h4>
           </div>
           <div className='space-y-1 text-end sm:text-start xl:mr-48 2xl:mr-72'>
             <p>Bill to</p>

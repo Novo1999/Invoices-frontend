@@ -14,7 +14,7 @@ const ItemListField = () => {
   const formFields = watch().itemList
 
   // check if last field has value and render the add new item button only if it does
-  const lastField = formFields[formFields.length - 1] || {}
+  const lastField = (formFields && formFields[formFields.length - 1]) || {}
   let lastFieldHasValue = null
   if (
     lastField?.itemName?.length > 0 &&

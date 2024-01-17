@@ -28,20 +28,19 @@ const AddForm = () => {
   const { width } = useWindowDimensions()
   const dispatch = useDispatch()
 
-  const setFormDefault = () => {
-    if (mode === 'add') {
-      return {
-        defaultValues: {
-          itemList: [{ id: '', itemName: '', quantity: '', price: '' }],
-        },
-      }
-    }
-    if (mode === 'edit') {
-      return { defaultValues: formValues }
-    }
-  }
+  const methods = useForm({
+    defaultValues: {
+      itemList: [{ id: '', itemName: '', quantity: '', price: '' }],
+    },
+  })
 
-  const methods = useForm(setFormDefault())
+  // pre filling the form before editing
+  useEffect(() => {
+    methods.reset({
+      itemList: [{ id: '', itemName: '', quantity: '', price: '' }],
+      ...(mode === 'edit' ? formValues : {}),
+    })
+  }, [mode, methods, formValues])
 
   useEffect(() => {
     // Set a timeout to apply the delayed class after 1 second

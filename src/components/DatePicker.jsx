@@ -8,6 +8,7 @@ const DatePick = () => {
   const dispatch = useDispatch()
   const handleValueChange = (newValue) => {
     setValue(newValue)
+    console.log(newValue)
   }
 
   useEffect(() => {
