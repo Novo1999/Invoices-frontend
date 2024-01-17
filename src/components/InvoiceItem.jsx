@@ -17,7 +17,7 @@ const InvoiceItem = ({ isDragging, invoice, setIsDragging }) => {
           <span className='text-gray-200'>{id[0]}</span>
           <span className='font-bold'>{id.slice(1)}</span>
         </div>
-        <p className='lg:col-span-1 text-xs'>Due {due}</p>
+        <p className='lg:col-span-1 text-xs'>Due {due} days</p>
         <p className='block sm:hidden font-semibold'>$ {amount}</p>
         <p className='text-sm lg:text-base hidden sm:block text-end font-semibold'>
           {name}

@@ -28,16 +28,17 @@ const AddForm = () => {
   const { width } = useWindowDimensions()
   const dispatch = useDispatch()
 
+  console.log(formValues)
+
   const methods = useForm({
     defaultValues: {
-      itemList: [{ id: '', itemName: '', quantity: '', price: '' }],
+      // itemList: [{ id: '', itemName: '', quantity: '', price: '' }],
     },
   })
 
   // pre filling the form before editing
   useEffect(() => {
     methods.reset({
-      itemList: [{ id: '', itemName: '', quantity: '', price: '' }],
       ...(mode === 'edit' ? formValues : {}),
     })
   }, [mode, methods, formValues])
