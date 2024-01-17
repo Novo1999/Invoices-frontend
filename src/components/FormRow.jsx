@@ -5,6 +5,7 @@ import { useFormContext } from 'react-hook-form'
 
 const FormRow = ({ label, name, className, type }) => {
   const { register } = useFormContext()
+  // dynamically setting validation properties
   const setValidationProperties = (name) => {
     let validation = { required: true }
     if (name === 'name') {

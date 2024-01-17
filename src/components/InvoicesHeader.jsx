@@ -2,16 +2,23 @@ import { ImCross } from 'react-icons/im'
 import { MdAddCircle } from 'react-icons/md'
 import { useDispatch, useSelector } from 'react-redux'
 import { useGetInvoicesQuery } from '../features/invoicesApi/invoicesApi.js'
-import { open } from '../features/sidebar/sidebarSlice'
+import { mode, open } from '../features/sidebar/sidebarSlice'
 import Select from './Select.jsx'
 
 const InvoicesHeader = () => {
   const { filterBy } = useSelector((state) => state.filter)
   const { data, isLoading, isError } = useGetInvoicesQuery()
+
   // getting filtered item count
   const filteredInvoicesCount = data?.filter(
     (item) => item.status === filterBy
   ).length
+
+  const handleNewInvoiceClick = () => {
+    dispatch(open())
+    dispatch(mode({ mode: 'add', formValues: {} }))
+  }
+
   const dispatch = useDispatch()
 
   let content = null
@@ -67,7 +74,7 @@ const InvoicesHeader = () => {
         {data?.length > 0 && <Select />}
         {/* add new invoice */}
         <button
-          onClick={() => dispatch(open())}
+          onClick={handleNewInvoiceClick}
           className='btn rounded-full bg-gradient-to-r from-rose-700 to-pink-600 text-white '
         >
           <span className='border border-white rounded-full p-1 text-lg'>

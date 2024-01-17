@@ -20,15 +20,28 @@ const AddForm = () => {
   const { date } = useSelector((state) => state.date)
   const [addInvoice] = useAddInvoiceMutation()
   const [addOrder] = useAddOrderMutation()
-  const { sidebarOpen } = useSelector((state) => state.sidebar)
+  const {
+    sidebarOpen,
+    sidebarMode: { mode, formValues },
+  } = useSelector((state) => state.sidebar)
   const [delayedClass, setDelayedClass] = useState('')
   const { width } = useWindowDimensions()
   const dispatch = useDispatch()
-  const methods = useForm({
-    defaultValues: {
-      itemList: [{ id: '', itemName: '', quantity: '', price: '' }],
-    },
-  })
+
+  const setFormDefault = () => {
+    if (mode === 'add') {
+      return {
+        defaultValues: {
+          itemList: [{ id: '', itemName: '', quantity: '', price: '' }],
+        },
+      }
+    }
+    if (mode === 'edit') {
+      return { defaultValues: formValues }
+    }
+  }
+
+  const methods = useForm(setFormDefault())
 
   useEffect(() => {
     // Set a timeout to apply the delayed class after 1 second
@@ -65,6 +78,7 @@ const AddForm = () => {
     },
   }
 
+  // user cannot scroll when the sidebar is open
   useEffect(() => {
     if (sidebarOpen) {
       document.body.style.overflow = 'hidden'
@@ -84,7 +98,8 @@ const AddForm = () => {
       .unwrap()
       .then((payload) => {
         addOrder({ data: payload.id }) // sending the new order ID after posting invoice
-        // injecting the _id in the new order
+
+        // injecting the _id in the new order so user can click later to access them, without this, it would show undefined which should not happen
         dispatch(
           api.util.updateQueryData('getInvoices', undefined, (draft) => {
             draft.map((invoice) => {
@@ -96,6 +111,7 @@ const AddForm = () => {
           })
         )
       })
+    console.log(data)
   }
 
   return (

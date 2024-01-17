@@ -63,7 +63,7 @@ const InvoiceDetails = ({ invoice }) => {
           <p>Total</p>
         </div>
         {items.map((item) => (
-          <ItemRow key={item.id} item={item} />
+          <ItemRow key={item._id} item={item} />
         ))}
       </section>
       <div className='flex justify-around h-40 lg:text-lg items-center bg-indigo-900 rounded-b-xl '>

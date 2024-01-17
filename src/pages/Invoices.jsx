@@ -80,7 +80,7 @@ const Invoices = () => {
     content = Array.from({ length: 10 }, (_, i) => i).map((_, index) => (
       <div
         key={index}
-        className='flex flex-col gap-4 w-full items-center justify-center mt-12'
+        className='flex flex-col gap-4 w-full items-center justify-center mt-12 *:bg-gradient-to-r from-sky-400 to-cyan-300'
       >
         <div className='skeleton h-4 w-full'></div>
         <div className='skeleton h-4 w-full'></div>

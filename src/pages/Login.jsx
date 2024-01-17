@@ -1,5 +1,5 @@
 import { SignIn } from '@clerk/clerk-react'
-import brandImage from '../../public/brandImg.png'
+import brandImage from '../assets/brandImg.png'
 import { dark } from '@clerk/themes'
 const Login = () => {
   return (

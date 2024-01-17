@@ -9,8 +9,10 @@ import ResButton from './ResButton'
 import Status from './Status'
 import { useDispatch } from 'react-redux'
 import api from '../features/api/apiSlice.js'
+import { mode, open } from '../features/sidebar/sidebarSlice.js'
 
 const StatusBlock = ({ invoice }) => {
+  console.log(invoice)
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const { status, id } = invoice
@@ -26,6 +28,13 @@ const StatusBlock = ({ invoice }) => {
 
   const handleInvoiceStatus = async (status) => {
     changeInvoiceStatus({ id: routeId, data: { status } })
+  }
+
+  const handleEdit = () => {
+    dispatch(open())
+    dispatch(
+      mode({ mode: 'edit', formValues: { street: invoice.billFrom.street } })
+    )
   }
 
   let button = null
@@ -89,15 +98,17 @@ const StatusBlock = ({ invoice }) => {
   }
 
   return (
-    <section className='flex w-full mx-4 shadow-lg p-4 flex-col sm:ml-24 sm:flex-row justify-between mt-20 rounded-lg xl:max-w-[58.5rem] 2xl:max-w-[71.5rem] bg-white'>
-      <div className='flex gap-4 justify-center items-center mb-4'>
+    <section className='flex w-full mx-4 shadow-lg p-4 flex-col sm:ml-24 sm:flex-row justify-between  mt-20 rounded-lg xl:max-w-[58.5rem] 2xl:max-w-[71.5rem] bg-white'>
+      <div className='flex gap-4 justify-center items-center'>
         <p className='text-gray-400 font-bold text-lg'>Status</p>
         <span>
           <Status place='not component' status={status} />
         </span>
       </div>
       <div className='flex justify-between sm:justify-end sm:gap-4'>
-        <ResButton type='edit'>Edit</ResButton>
+        <ResButton onClick={handleEdit} type='edit'>
+          Edit
+        </ResButton>
         <ResButton onClick={handleDelete} type='delete'>
           Delete
         </ResButton>
