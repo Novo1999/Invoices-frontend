@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import {
   useAddInvoiceMutation,
   useAddOrderMutation,
+  useEditInvoiceMutation,
 } from '../features/invoicesApi/invoicesApi.js'
 import useWindowDimensions from '../hooks/useWindowDimensions'
 import { makeId } from '../utils/idMaker.js'
@@ -15,11 +16,18 @@ import FormRow from './FormRow'
 import ItemListField from './ItemListField'
 import Overlay from './Overlay'
 import api from '../features/api/apiSlice.js'
+import { useParams } from 'react-router-dom'
+
+const defaultFormFieldInitializer = {
+  itemList: [{ itemName: '', quantity: '', price: '' }],
+}
 
 const AddForm = () => {
   const { date } = useSelector((state) => state.date)
   const [addInvoice] = useAddInvoiceMutation()
+  const [editInvoice] = useEditInvoiceMutation()
   const [addOrder] = useAddOrderMutation()
+  const { id } = useParams() || {}
   const {
     sidebarOpen,
     sidebarMode: { mode, formValues },
@@ -28,18 +36,14 @@ const AddForm = () => {
   const { width } = useWindowDimensions()
   const dispatch = useDispatch()
 
-  console.log(formValues)
-
   const methods = useForm({
-    defaultValues: {
-      // itemList: [{ id: '', itemName: '', quantity: '', price: '' }],
-    },
+    defaultValues: defaultFormFieldInitializer,
   })
 
   // pre filling the form before editing
   useEffect(() => {
     methods.reset({
-      ...(mode === 'edit' ? formValues : {}),
+      ...(mode === 'edit' ? formValues : defaultFormFieldInitializer),
     })
   }, [mode, methods, formValues])
 
@@ -88,30 +92,38 @@ const AddForm = () => {
     }
   }, [sidebarOpen])
 
+  // adding
   const onSubmit = (data) => {
-    // adding the id from the invoices to the order array after adding an invoice
-    addInvoice({
-      ...data,
-      date: moment(date).format('DD MMMM YYYY'),
-      id: `#${makeId(6)}`,
-    })
-      .unwrap()
-      .then((payload) => {
-        addOrder({ data: payload.id }) // sending the new order ID after posting invoice
-
-        // injecting the _id in the new order so user can click later to access them, without this, it would show undefined which should not happen
-        dispatch(
-          api.util.updateQueryData('getInvoices', undefined, (draft) => {
-            draft.map((invoice) => {
-              if (invoice.id === payload.id) {
-                invoice._id = payload._id
-              }
-              return invoice
-            })
-          })
-        )
+    if (mode === 'add') {
+      // adding the id from the invoices to the order array after adding an invoice
+      addInvoice({
+        ...data,
+        date: moment(date).format('DD MMMM YYYY'),
+        id: `#${makeId(6)}`,
       })
-    console.log(data)
+        .unwrap()
+        .then((payload) => {
+          addOrder({ data: payload.id }) // sending the new order ID after posting invoice
+
+          // injecting the _id in the new order so user can click later to access them, without this, it would show undefined which should not happen
+          dispatch(
+            api.util.updateQueryData('getInvoices', undefined, (draft) => {
+              draft.map((invoice) => {
+                if (invoice.id === payload.id) {
+                  invoice._id = payload._id
+                }
+                return invoice
+              })
+            })
+          )
+        })
+    }
+    if (mode === 'edit' && id) {
+      editInvoice({
+        id,
+        data,
+      })
+    }
   }
 
   return (
@@ -130,7 +142,9 @@ const AddForm = () => {
             variants={sidebar}
             onSubmit={methods.handleSubmit(onSubmit)}
           >
-            <h1 className='text-2xl'>Add New</h1>
+            <h1 className='text-2xl'>
+              {mode === 'add' ? 'Add New' : 'Edit Form'}
+            </h1>
             {/* bill from */}
             <p className='text-lg font-bold text-purple-500'>Bill From</p>
             <FormRow label='Street Address' name='street' />

@@ -23,6 +23,7 @@ const ItemListField = () => {
   ) {
     lastFieldHasValue = true
   }
+  // append the field
   const handleAppend = () => {
     append()
     // scroll to the bottom right after new field is added

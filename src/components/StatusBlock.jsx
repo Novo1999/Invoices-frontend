@@ -33,8 +33,6 @@ const StatusBlock = ({ invoice }) => {
     changeInvoiceStatus({ id: routeId, data: { status } })
   }
 
-  console.log(invoiceDate.split('T')[0])
-
   // getting data from the current invoice to place in the form
   const handleEdit = () => {
     dispatch(open())
@@ -54,10 +52,16 @@ const StatusBlock = ({ invoice }) => {
           toCountry: billTo.country,
           payment: due,
           project,
-          itemList: items,
+          itemList: items.map((item) => {
+            return {
+              ...item,
+              itemName: item.name,
+            }
+          }),
         },
       })
     )
+    // setting the date in date picker
     dispatch(
       setDate({
         startDate: invoiceDate.split('T')[0],

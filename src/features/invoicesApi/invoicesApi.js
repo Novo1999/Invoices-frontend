@@ -1,4 +1,5 @@
 import invoiceApi from '../api/apiSlice.js'
+import { current } from '@reduxjs/toolkit'
 
 const invoicesApi = invoiceApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -81,6 +82,72 @@ const invoicesApi = invoiceApi.injectEndpoints({
         }
       },
     }),
+    editInvoice: builder.mutation({
+      query: ({ id, data }) => ({
+        url: `/protected/${id}`,
+        method: 'PATCH',
+        body: data,
+      }),
+      async onQueryStarted({ data, id }, { dispatch, queryFulfilled }) {
+        const patchResult = dispatch(
+          invoiceApi.util.updateQueryData('getInvoice', id, (draft) => {
+            const existingInvoice = current(draft)[0] // Get the existing invoice data
+            if (existingInvoice) {
+              const {
+                clientStreet,
+                fromCity,
+                fromCountry,
+                fromPostCode,
+                itemList,
+                payment,
+                toCity,
+                toCountry,
+                toPostCode,
+                street,
+                email,
+                name,
+                project,
+              } = data
+              console.log(data)
+
+              draft[0] = {
+                ...existingInvoice, // Preserve existing values
+                billFrom: {
+                  city: fromCity,
+                  country: fromCountry,
+                  postCode: fromPostCode,
+                  street,
+                },
+                billTo: {
+                  city: toCity,
+                  country: toCountry,
+                  postCode: toPostCode,
+                  street: clientStreet,
+                },
+                due: payment.toString(),
+                paymentTerm: payment,
+                items: itemList.map((item) => {
+                  return {
+                    ...item,
+                    name: item.itemName,
+                  }
+                }),
+                email,
+                name,
+                project,
+              }
+
+              return draft
+            }
+          })
+        )
+        try {
+          await queryFulfilled
+        } catch (error) {
+          patchResult.undo()
+        }
+      },
+    }),
     // CHANGE INVOICE STATUS
     changeInvoiceStatus: builder.mutation({
       query: ({ id, data }) => ({
@@ -146,4 +213,5 @@ export const {
   useAddOrderMutation,
   useGetInvoiceQuery,
   useDeleteInvoiceMutation,
+  useEditInvoiceMutation,
 } = invoicesApi
