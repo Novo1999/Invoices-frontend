@@ -13,7 +13,6 @@ import { mode, open } from '../features/sidebar/sidebarSlice.js'
 import { setDate } from '../features/date/dateSlice.js'
 
 const StatusBlock = ({ invoice }) => {
-  console.log(invoice)
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const { status, id } = invoice

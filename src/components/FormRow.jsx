@@ -2,9 +2,13 @@ import { motion } from 'framer-motion'
 import { emailRegex } from '../utils/constants.js'
 import PaymentTerms from './PaymentTerms.jsx'
 import { useFormContext } from 'react-hook-form'
+import { ErrorMessage } from '@hookform/error-message'
 
 const FormRow = ({ label, name, className, type }) => {
-  const { register } = useFormContext()
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext()
   // dynamically setting validation properties
   const setValidationProperties = (name) => {
     let validation = { required: true }
@@ -50,6 +54,13 @@ const FormRow = ({ label, name, className, type }) => {
           className={`input input-bordered w-full max-w-full`}
           type={type === 'number' ? 'number' : 'text'}
           {...register(name, setValidationProperties(name))}
+        />
+        <ErrorMessage errors={errors} name={name} />
+
+        <ErrorMessage
+          errors={errors}
+          name={name}
+          render={({ message }) => <p>{message}</p>}
         />
       </motion.fieldset>
     )

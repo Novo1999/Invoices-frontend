@@ -1,4 +1,5 @@
 /* eslint-disable react/prop-types */
+import moment from 'moment'
 import ItemRow from './ItemRow'
 
 const InvoiceDetails = ({ invoice }) => {
@@ -37,7 +38,7 @@ const InvoiceDetails = ({ invoice }) => {
         <div className='flex justify-between sm:w-[21rem] lg:w-[30rem] xl:w-[42rem] 2xl:w-[55rem]'>
           <div className='space-y-1'>
             <p>Invoice Date</p>
-            <h4>{invoiceDate}</h4>
+            <h4>{moment(invoiceDate).format('DD-MM-YYYY')}</h4>
             <p>Payment Due</p>
             <h4>{due} days</h4>
           </div>

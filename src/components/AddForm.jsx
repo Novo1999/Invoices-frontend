@@ -1,130 +1,19 @@
 import { motion } from 'framer-motion'
-import moment from 'moment'
-import { useEffect, useState } from 'react'
-import { FormProvider, useForm } from 'react-hook-form'
-import { useDispatch, useSelector } from 'react-redux'
-import {
-  useAddInvoiceMutation,
-  useAddOrderMutation,
-  useEditInvoiceMutation,
-} from '../features/invoicesApi/invoicesApi.js'
-import useWindowDimensions from '../hooks/useWindowDimensions'
-import { makeId } from '../utils/idMaker.js'
-import { setFormWidth } from '../utils/setFormWidth'
+import { FormProvider } from 'react-hook-form'
+import { useSelector } from 'react-redux'
+import { useAddForm } from '../hooks/useAddForm.js'
 import DatePick from './DatePicker'
 import FormRow from './FormRow'
 import ItemListField from './ItemListField'
 import Overlay from './Overlay'
-import api from '../features/api/apiSlice.js'
-import { useParams } from 'react-router-dom'
-
-const defaultFormFieldInitializer = {
-  itemList: [{ itemName: '', quantity: '', price: '' }],
-}
 
 const AddForm = () => {
-  const { date } = useSelector((state) => state.date)
-  const [addInvoice] = useAddInvoiceMutation()
-  const [editInvoice] = useEditInvoiceMutation()
-  const [addOrder] = useAddOrderMutation()
-  const { id } = useParams() || {}
   const {
     sidebarOpen,
-    sidebarMode: { mode, formValues },
+    sidebarMode: { mode },
   } = useSelector((state) => state.sidebar)
-  const [delayedClass, setDelayedClass] = useState('')
-  const { width } = useWindowDimensions()
-  const dispatch = useDispatch()
 
-  const methods = useForm({
-    defaultValues: defaultFormFieldInitializer,
-  })
-
-  // pre filling the form before editing
-  useEffect(() => {
-    methods.reset({
-      ...(mode === 'edit' ? formValues : defaultFormFieldInitializer),
-    })
-  }, [mode, methods, formValues])
-
-  useEffect(() => {
-    // Set a timeout to apply the delayed class after 1 second
-    const timeoutId = setTimeout(
-      () => {
-        setDelayedClass(sidebarOpen ? 'p-5 transition-all' : '')
-      },
-      sidebarOpen ? 0 : 220
-    )
-
-    // Clear the timeout if the component unmounts or sidebarOpen changes
-    return () => clearTimeout(timeoutId)
-  }, [sidebarOpen])
-
-  const sidebar = {
-    open: (height = 1000) => ({
-      clipPath: `circle(${height * 2 + 200}px at 40px 40px)`,
-      transition: {
-        ease: 'linear',
-        duration: 0.2,
-        stiffness: 50,
-        restDelta: 2,
-      },
-      maxHeight: 'calc(100vh - 40px)',
-    }),
-    closed: {
-      clipPath: 'circle(30px at 40px 40px)',
-      transition: {
-        type: 'spring',
-        stiffness: 400,
-        damping: 40,
-      },
-      width: setFormWidth(sidebarOpen, width),
-    },
-  }
-
-  // user cannot scroll when the sidebar is open
-  useEffect(() => {
-    if (sidebarOpen) {
-      document.body.style.overflow = 'hidden'
-    }
-    if (!sidebarOpen) {
-      document.body.style.overflow = 'unset'
-    }
-  }, [sidebarOpen])
-
-  // adding
-  const onSubmit = (data) => {
-    if (mode === 'add') {
-      // adding the id from the invoices to the order array after adding an invoice
-      addInvoice({
-        ...data,
-        date: moment(date).format('DD MMMM YYYY'),
-        id: `#${makeId(6)}`,
-      })
-        .unwrap()
-        .then((payload) => {
-          addOrder({ data: payload.id }) // sending the new order ID after posting invoice
-
-          // injecting the _id in the new order so user can click later to access them, without this, it would show undefined which should not happen
-          dispatch(
-            api.util.updateQueryData('getInvoices', undefined, (draft) => {
-              draft.map((invoice) => {
-                if (invoice.id === payload.id) {
-                  invoice._id = payload._id
-                }
-                return invoice
-              })
-            })
-          )
-        })
-    }
-    if (mode === 'edit' && id) {
-      editInvoice({
-        id,
-        data,
-      })
-    }
-  }
+  const { methods, delayedClass, sidebar, onSubmit } = useAddForm()
 
   return (
     <section>

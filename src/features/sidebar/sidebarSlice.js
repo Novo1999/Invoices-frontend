@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 const initialState = {
   sidebarOpen: false,
   sidebarMode: {
-    mode: 'add',
+    mode: '',
     formValues: {},
   },
 }
@@ -24,11 +24,3 @@ export const sidebarSlice = createSlice({
 export const { open, close, mode } = sidebarSlice.actions
 
 export default sidebarSlice.reducer
-
-/*
-
-BILL FROM
-----------
-
-
- */
