@@ -1,78 +1,25 @@
 import { Reorder } from 'framer-motion'
-import { useEffect, useState } from 'react'
 import { ImCross } from 'react-icons/im'
-import { useSelector } from 'react-redux'
 import InvoiceItem from '../components/InvoiceItem.jsx'
 import InvoicesHeader from '../components/InvoicesHeader'
-import {
-  useGetInvoicesQuery,
-  useGetOrdersOfInvoicesQuery,
-  useReorderInvoicesMutation,
-} from '../features/invoicesApi/invoicesApi.js'
-import debouncedReorder from '../utils/debouncedReorder.js'
 import { filterByStatus } from '../utils/filterByStatus.js'
+import { useInvoices } from '../hooks/useInvoices.js'
 
 const Invoices = () => {
-  const { filterBy } = useSelector((state) => state.filter)
   const {
-    data: invoices,
     isLoading,
+    isLoadingOrder,
     isError,
-    error,
-  } = useGetInvoicesQuery(undefined, {
-    refetchOnMountOrArgChange: true,
-  })
-  const {
-    data: invoicesOrder,
     isSuccess,
-    isLoading: isLoadingOrder,
-    isError: isOrderError,
-  } = useGetOrdersOfInvoicesQuery()
-
-  const [reorderInvoices] = useReorderInvoicesMutation()
-
-  // state for reordering by dragging
-  const [items, setItems] = useState([])
-  // setting dragListener to true for mobile
-  const [isDragging, setIsDragging] = useState(false)
-
-  // prevent user from dragging the items when they filter by status
-  useEffect(() => {
-    if (filterBy !== '') setIsDragging(false)
-    if (filterBy === '') setIsDragging(true)
-  }, [filterBy])
-
-  // set items when no loading or error state on mount
-  useEffect(() => {
-    if (!isLoading && !isError) {
-      setItems(invoices)
-    }
-  }, [invoices, isLoading, isError])
-
-  useEffect(() => {
-    if (isSuccess && !isOrderError) {
-      setItems((current) =>
-        invoicesOrder?.order.map((id) => {
-          return current.find((item) => item.id === id)
-        })
-      )
-    }
-  }, [isSuccess, invoicesOrder, isOrderError])
-
-  // this reorders the invoices
-  const handleReorder = (reorderedIds) => {
-    const reorderedInvoices = reorderedIds.map((id) =>
-      items.find((invoice) => invoice.id === id)
-    )
-    setItems(reorderedInvoices)
-    const reorderedInvoicesIds = reorderedInvoices.map((invoice) => invoice.id)
-
-    // Cancel the previous debouncedReorder function
-    debouncedReorder.cancel()
-
-    // Call the debounced function
-    debouncedReorder(reorderInvoices, reorderedInvoicesIds)
-  }
+    invoices,
+    handleReorder,
+    items,
+    isDragging,
+    setIsDragging,
+    filterBy,
+    isOrderError,
+    error,
+  } = useInvoices()
 
   let content = null
 
