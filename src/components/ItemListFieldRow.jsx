@@ -8,9 +8,9 @@ const ItemListFieldRow = ({ index, label, inputName, className }) => {
   } = useFormContext()
 
   return (
-    <fieldset className={`flex flex-col ${className} gap-4 mt-2`}>
+    <fieldset className={`flex flex-col ${className} gap-4 mt-2 `}>
       <input
-        className='input input-bordered w-full max-w-full'
+        className='input input-bordered w-full max-w-full bg-white rounded-md'
         {...register(`itemList.${index}.${inputName}`, {
           valueAsNumber: inputName !== 'itemName',
           required: `${label} cannot be empty`,

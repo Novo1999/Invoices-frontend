@@ -1,16 +1,11 @@
-import { RiDeleteBin7Fill } from 'react-icons/ri'
-import { FiPlusSquare } from 'react-icons/fi'
-import ItemListHeader from './ItemListHeader.jsx'
 import { useFieldArray, useFormContext } from 'react-hook-form'
+import { FiPlusSquare } from 'react-icons/fi'
+import { RiDeleteBin7Fill } from 'react-icons/ri'
 import ItemListFieldRow from './ItemListFieldRow.jsx'
+import ItemListHeader from './ItemListHeader.jsx'
 
 const ItemListField = () => {
-  const {
-    register,
-    control,
-    watch,
-    formState: { errors },
-  } = useFormContext()
+  const { register, control, watch } = useFormContext()
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'itemList',
@@ -46,7 +41,7 @@ const ItemListField = () => {
       <ItemListHeader fieldsLength={fields.length} />
       {fields.map((item, index) => (
         <li
-          className='grid grid-cols-3 lg:grid-cols-6 gap-2 justify-center pb-6'
+          className='grid grid-cols-3 lg:grid-cols-6 gap-2 justify-center pb-6 '
           key={item.id}
         >
           <ItemListFieldRow
@@ -78,7 +73,7 @@ const ItemListField = () => {
           {index !== 0 && (
             <button
               onClick={() => remove(index)}
-              className='btn text-white btn-square sm:mt-2 btn-outline w-full text-xl lg:w-full lg:px-2 col-span-2 sm:col-span-1'
+              className='btn text-white btn-square sm:mt-2 btn-outline w-full text-xl lg:w-full lg:px-2 col-span-2 sm:col-span-1 rounded-md'
             >
               <RiDeleteBin7Fill />
               <span className='block lg:hidden'>Delete</span>

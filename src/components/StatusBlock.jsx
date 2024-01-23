@@ -7,7 +7,7 @@ import {
 } from '../features/invoicesApi/invoicesApi.js'
 import ResButton from './ResButton'
 import Status from './Status'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import api from '../features/api/apiSlice.js'
 import { mode, open } from '../features/sidebar/sidebarSlice.js'
 import { setDate } from '../features/date/dateSlice.js'
@@ -21,6 +21,10 @@ const StatusBlock = ({ invoice }) => {
   const [deleteInvoice] = useDeleteInvoiceMutation()
   const { billFrom, billTo, due, project, email, name, invoiceDate, items } =
     invoice
+  const { isDark } = useSelector((state) => state.theme)
+  const darkGradient = isDark
+    ? 'bg-gradient-to-r from-gray-700 via-gray-900 to-black'
+    : 'bg-gradient-to-r from-blue-500 to-blue-600 text-white'
 
   const handleDelete = async () => {
     await deleteInvoice({ _id: routeId, id })
@@ -130,9 +134,11 @@ const StatusBlock = ({ invoice }) => {
   }
 
   return (
-    <section className='flex w-full mx-4 shadow-lg p-4 flex-col sm:ml-24 sm:flex-row justify-between mt-20 rounded-lg xl:max-w-[58.5rem] 2xl:max-w-[71.5rem] bg-white'>
+    <section
+      className={`flex w-full mx-4 shadow-lg p-4 flex-col ${darkGradient} sm:ml-24 sm:flex-row justify-between mt-20 rounded-lg xl:max-w-[58.5rem] 2xl:max-w-[71.5rem] bg-white`}
+    >
       <div className='flex justify-between sm:gap-2 mb-2 items-center'>
-        <p className='text-gray-400 font-bold text-lg'>Status</p>
+        <p className='font-bold text-lg'>Status</p>
         <span>
           <Status place='not component' status={status} />
         </span>

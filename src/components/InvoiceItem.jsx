@@ -6,9 +6,15 @@ import Status from './Status.jsx'
 const InvoiceItem = ({ isDragging, invoice, setIsDragging }) => {
   const { filterBy } = useSelector((state) => state.filter)
   const { _id, id, name, due, amount, status } = invoice || {}
+  const { isDark } = useSelector((state) => state.theme)
+
+  const darkGradient = isDark
+    ? 'bg-gradient-to-r from-gray-700 via-gray-900 to-black'
+    : 'bg-gradient-to-r from-sky-400 to-cyan-300'
+
   return (
     <Reorder.Item
-      className='grid grid-cols-2 mx-4 mt-4 bg-gradient-to-r from-sky-400 to-cyan-300 lg:ml-5 font-poppins font-bold p-4 rounded-lg shadow-lg items-center w-fit sm:w-[38rem] lg:w-[43rem]'
+      className={`grid grid-cols-2 mx-4 mt-4 ${darkGradient} lg:ml-5 font-poppins font-bold p-4 rounded-lg shadow-lg items-center w-fit sm:w-[38rem] lg:w-[43rem]`}
       dragListener={isDragging}
       value={id}
     >

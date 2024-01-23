@@ -41,7 +41,7 @@ const ResButton = ({ children, type, onClick }) => {
   return (
     <button
       onClick={onClick}
-      className={`btn btn-md ${background} ${tooltipClass} md:btn-md tooltip lg:btn-lg rounded-[4rem]`}
+      className={`btn btn-md ${background} ${tooltipClass} md:btn-md tooltip lg:btn-lg rounded-[4rem] border-none shadow-md`}
       data-tip={tooltip}
     >
       {children}

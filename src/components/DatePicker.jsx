@@ -2,29 +2,32 @@ import moment from 'moment'
 import { useEffect, useState } from 'react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { setDate } from '../features/date/dateSlice.js'
 import { useGetInvoiceQuery } from '../features/invoicesApi/invoicesApi.js'
 
 const DatePick = () => {
+  const {
+    sidebarMode: { mode },
+  } = useSelector((state) => state.sidebar)
   const [localDate, setLocalDate] = useState(new Date())
   const dispatch = useDispatch()
   const { id } = useParams()
 
-  const { data, isSuccess } = useGetInvoiceQuery(id)
+  const { data, isSuccess } = useGetInvoiceQuery(id, { skip: mode !== 'edit' }) // don't fetch invoice when edit mode is not true
 
   useEffect(() => {
-    if (isSuccess) {
+    if (isSuccess && mode === 'edit') {
       setLocalDate(new Date(data[0].invoiceDate))
       const formattedDate = moment(localDate).format('YYYY-MM-DD')
       dispatch(setDate(formattedDate))
     }
-  }, [data, dispatch, isSuccess])
+  }, [data, dispatch, isSuccess, mode])
 
   return (
     <DatePicker
-      className='rounded-md p-4 cursor-pointer'
+      className='rounded-md p-4 cursor-pointer bg-white'
       dateFormat='MM-dd-yyyy'
       includeTimes={false}
       selected={localDate}

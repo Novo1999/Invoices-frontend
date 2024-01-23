@@ -5,7 +5,7 @@ const PaymentTerms = () => {
   return (
     <select
       {...register('payment', { valueAsNumber: true })}
-      className='select select-bordered w-full max-w-xs text-black'
+      className='select select-bordered w-full max-w-xs text-black bg-white rounded-md'
       defaultValue={10}
     >
       <option value={10}>Net 10 days</option>

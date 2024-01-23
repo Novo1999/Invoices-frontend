@@ -63,7 +63,7 @@ const FormRow = ({ label, name, className, type }) => {
           {label}
         </label>
         <input
-          className={`input input-bordered w-full max-w-full`}
+          className={`input input-bordered w-full max-w-full bg-white rounded-md`}
           type={type === 'number' ? 'number' : 'text'}
           {...register(name, setValidationProperties(name))}
         />

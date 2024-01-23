@@ -77,8 +77,11 @@ const AddForm = () => {
             <FormRow label='Project Description' name='project' />
             <p className='text-2xl font-semibold'>Item List</p>
             <ItemListField />
-            <div className='flex justify-center'>
-              <input className='btn' type='submit' />
+            <div className='flex justify-center '>
+              <input
+                className='btn bg-white rounded-md hover:text-white hover:bg-red-500'
+                type='submit'
+              />
             </div>
           </motion.form>
         </FormProvider>

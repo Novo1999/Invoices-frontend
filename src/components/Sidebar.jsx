@@ -1,6 +1,6 @@
 import { createPortal } from 'react-dom'
 import { BsReverseLayoutTextSidebarReverse } from 'react-icons/bs'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import AddForm from './AddForm'
 import DarkModeSwap from './DarkModeSwap'
 import SidebarContainer from './SidebarContainer'
@@ -8,6 +8,12 @@ import { SignOutButton, UserButton } from '@clerk/clerk-react'
 import { mode, open } from '../features/sidebar/sidebarSlice.js'
 const Sidebar = () => {
   const dispatch = useDispatch()
+  const { isDark } = useSelector((state) => state.theme)
+
+  const darkGradient = isDark
+    ? 'bg-gradient-to-r from-gray-700 via-gray-900 to-black'
+    : 'bg-gradient-to-r from-blue-500 to-blue-600'
+
   return (
     <>
       <SidebarContainer>
@@ -17,7 +23,7 @@ const Sidebar = () => {
             dispatch(open())
             dispatch(mode({ mode: 'add', formValues: {} }))
           }}
-          className='bg-gradient-to-r from-gray-700 via-gray-900 to-black p-4 size-fit text-white md:size-20 flex justify-center items-center md:text-2xl tooltip tooltip-right tooltip-bg-blue-300 cursor-pointer border border-white rounded-md'
+          className={`${darkGradient} p-4 size-fit text-white md:size-20 flex justify-center items-center md:text-2xl tooltip tooltip-right tooltip-bg-blue-300 cursor-pointer border border-white rounded-md`}
           data-tip='Add New'
         >
           <BsReverseLayoutTextSidebarReverse />

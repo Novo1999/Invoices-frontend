@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { setDark } from '../features/theme/themeSlice.js'
 
 const DarkModeSwap = () => {
-  const [isDark, setIsDark] = useState(
-    JSON.parse(localStorage.getItem('isDark'))
-  )
+  const { isDark } = useSelector((state) => state.theme)
+  const dispatch = useDispatch()
   useEffect(() => {
     localStorage.setItem('isDark', JSON.stringify(isDark))
   }, [isDark])
@@ -13,7 +14,7 @@ const DarkModeSwap = () => {
       {/* this hidden checkbox controls the state */}
       <input
         type='checkbox'
-        onChange={() => setIsDark(!isDark)}
+        onChange={() => dispatch(setDark(!isDark))}
         className='theme-controller'
         value='black'
         checked={isDark}
@@ -21,7 +22,7 @@ const DarkModeSwap = () => {
 
       {/* sun icon */}
       <svg
-        className='swap-on fill-current w-10 h-10'
+        className='swap-off fill-current w-10 h-10'
         xmlns='http://www.w3.org/2000/svg'
         viewBox='0 0 24 24'
       >
@@ -30,7 +31,7 @@ const DarkModeSwap = () => {
 
       {/* moon icon */}
       <svg
-        className='swap-off fill-current w-8 md:w-10 h-10'
+        className='swap-on fill-current w-8 md:w-10 h-10'
         xmlns='http://www.w3.org/2000/svg'
         viewBox='0 0 24 24'
       >
