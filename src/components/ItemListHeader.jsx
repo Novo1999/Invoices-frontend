@@ -9,7 +9,7 @@ const ItemListHeader = ({ fieldsLength }) => {
       <label className='hidden lg:block ml-4' htmlFor='item-total-price'>
         Total
       </label>
-      {fieldsLength !== 1 && (
+      {fieldsLength > 0 && (
         <label className='hidden lg:block ml-2' htmlFor='item-total-price'>
           Delete
         </label>

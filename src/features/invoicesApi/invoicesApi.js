@@ -1,3 +1,4 @@
+import moment from 'moment'
 import invoiceApi from '../api/apiSlice.js'
 import { current } from '@reduxjs/toolkit'
 
@@ -82,6 +83,7 @@ const invoicesApi = invoiceApi.injectEndpoints({
         }
       },
     }),
+    // EDIT INVOICE
     editInvoice: builder.mutation({
       query: ({ id, data }) => ({
         url: `/protected/${id}`,
@@ -107,7 +109,9 @@ const invoicesApi = invoiceApi.injectEndpoints({
                 email,
                 name,
                 project,
+                date,
               } = data
+              console.log(date)
 
               draft[0] = {
                 ...existingInvoice, // Preserve existing values
@@ -134,6 +138,7 @@ const invoicesApi = invoiceApi.injectEndpoints({
                 email,
                 name,
                 project,
+                invoiceDate: moment(date).format('DD MMMM YYYY'),
               }
 
               return draft

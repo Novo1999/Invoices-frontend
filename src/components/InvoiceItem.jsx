@@ -29,7 +29,7 @@ const InvoiceItem = ({ isDragging, invoice, setIsDragging }) => {
             {name}{' '}
           </p>
           <span
-            onTouchStart={() => filterBy === '' && setIsDragging(true)}
+            onTouchStart={() => setIsDragging(true)}
             style={{ touchAction: 'none' }}
           >
             <GrDrag />
@@ -37,13 +37,15 @@ const InvoiceItem = ({ isDragging, invoice, setIsDragging }) => {
         </div>
 
         <p className='hidden sm:block text-center font-semibold'>$ {amount}</p>
-        <span
-          onTouchStart={() => filterBy === '' && setIsDragging(true)}
-          style={{ touchAction: 'none' }}
-          className='absolute right-[165px] lg:right-[170px] xl:right-[170px] 2xl:right-42 hidden sm:block cursor-grab'
-        >
-          <GrDrag />
-        </span>
+        {filterBy === '' && (
+          <span
+            onTouchStart={() => setIsDragging(true)}
+            style={{ touchAction: 'none' }}
+            className='absolute right-[165px] lg:right-[170px] xl:right-[180px] 2xl:right-42 hidden sm:block cursor-grab'
+          >
+            <GrDrag />
+          </span>
+        )}
         <Status id={_id} place='component' status={status} />
       </div>
     </Reorder.Item>

@@ -3,15 +3,18 @@ import { emailRegex } from '../utils/constants.js'
 import PaymentTerms from './PaymentTerms.jsx'
 import { useFormContext } from 'react-hook-form'
 import { ErrorMessage } from '@hookform/error-message'
+import { useEffect } from 'react'
 
 const FormRow = ({ label, name, className, type }) => {
   const {
     register,
     formState: { errors },
+    setError,
   } = useFormContext()
+  console.log(errors)
   // dynamically setting validation properties
   const setValidationProperties = (name) => {
-    let validation = { required: true }
+    let validation = { required: `${label} cannot be empty` }
     if (name === 'name') {
       validation.maxLength = 20
     }
@@ -20,6 +23,16 @@ const FormRow = ({ label, name, className, type }) => {
     }
     return validation
   }
+
+  // setting email error message for wrong pattern
+  useEffect(() => {
+    if (errors?.email?.type === 'pattern') {
+      setError('email', {
+        type: 'pattern',
+        message: 'Invalid email pattern',
+      })
+    }
+  }, [errors?.email?.type, setError])
 
   const variants = {
     open: {
@@ -55,12 +68,10 @@ const FormRow = ({ label, name, className, type }) => {
           type={type === 'number' ? 'number' : 'text'}
           {...register(name, setValidationProperties(name))}
         />
-        <ErrorMessage errors={errors} name={name} />
-
         <ErrorMessage
           errors={errors}
           name={name}
-          render={({ message }) => <p>{message}</p>}
+          render={({ message }) => <p className='text-red-500'>{message}</p>}
         />
       </motion.fieldset>
     )

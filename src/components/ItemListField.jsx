@@ -5,11 +5,18 @@ import { useFieldArray, useFormContext } from 'react-hook-form'
 import ItemListFieldRow from './ItemListFieldRow.jsx'
 
 const ItemListField = () => {
-  const { register, control, watch } = useFormContext()
+  const {
+    register,
+    control,
+    watch,
+    formState: { errors },
+  } = useFormContext()
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'itemList',
   })
+
+  console.log(errors)
 
   const formFields = watch().itemList
 
@@ -41,23 +48,26 @@ const ItemListField = () => {
       <ItemListHeader fieldsLength={fields.length} />
       {fields.map((item, index) => (
         <li
-          className='grid grid-cols-3 lg:grid-cols-6 gap-2 items-center justify-center pb-6'
+          className='grid grid-cols-3 lg:grid-cols-6 gap-2 justify-center pb-6'
           key={item.id}
         >
           <ItemListFieldRow
             register={register}
             index={index}
             inputName='itemName'
+            label='Item Name'
             className='col-span-2'
           />
           <ItemListFieldRow
             register={register}
             index={index}
+            label='Item quantity'
             inputName='quantity'
           />
           <ItemListFieldRow
             register={register}
             index={index}
+            label='Item Price'
             inputName='price'
           />
           <p className='hidden lg:block text-lg text-center mt-2 mb'>

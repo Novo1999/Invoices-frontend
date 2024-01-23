@@ -5,7 +5,7 @@ import AddForm from './AddForm'
 import DarkModeSwap from './DarkModeSwap'
 import SidebarContainer from './SidebarContainer'
 import { SignOutButton, UserButton } from '@clerk/clerk-react'
-import { open } from '../features/sidebar/sidebarSlice.js'
+import { mode, open } from '../features/sidebar/sidebarSlice.js'
 const Sidebar = () => {
   const dispatch = useDispatch()
   return (
@@ -15,6 +15,7 @@ const Sidebar = () => {
           onClick={() => {
             window.scrollTo({ top: 0, behavior: 'smooth' })
             dispatch(open())
+            dispatch(mode({ mode: 'add', formValues: {} }))
           }}
           className='bg-gradient-to-r from-gray-700 via-gray-900 to-black p-4 size-fit text-white md:size-20 flex justify-center items-center md:text-2xl tooltip tooltip-right tooltip-bg-blue-300 cursor-pointer border border-white rounded-md'
           data-tip='Add New'
@@ -27,7 +28,7 @@ const Sidebar = () => {
           </span>
           <div className='absolute right-12 w-[1px] h-full bg-white sm:hidden'></div>
           <UserButton afterSignOutUrl='/login' />
-          <div className='bg-red-500 text-white w-fit p-4 rounded-full btn btn-error hover:bg-red-600 btn-xs place-content-center hidden sm:h-12 sm:flex whitespace-nowrap'>
+          <div className='bg-red-500 text-white w-fit p-3 rounded-full btn btn-error hover:bg-red-600 btn-xs place-content-center hidden sm:h-12 sm:flex whitespace-nowrap'>
             <SignOutButton />
           </div>
         </picture>

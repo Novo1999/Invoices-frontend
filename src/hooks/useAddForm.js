@@ -100,6 +100,8 @@ export const useAddForm = () => {
   // adding
   const onSubmit = (data) => {
     if (mode === 'add') {
+      console.log(data)
+
       // adding the id from the invoices to the order array after adding an invoice
       addInvoice({
         ...data,
@@ -125,9 +127,13 @@ export const useAddForm = () => {
     }
     // if edit mode, edit the invoice with the pre-filled form
     if (mode === 'edit' && id) {
+      console.log(data)
       editInvoice({
         id,
-        data,
+        data: {
+          ...data,
+          date: moment(date).format('DD MMMM YYYY'),
+        },
       })
     }
   }
