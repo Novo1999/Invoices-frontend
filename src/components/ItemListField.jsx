@@ -16,8 +16,6 @@ const ItemListField = () => {
     name: 'itemList',
   })
 
-  console.log(errors)
-
   const formFields = watch().itemList
 
   // check if last field has value and render the add new item button only if it does

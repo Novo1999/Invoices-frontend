@@ -19,7 +19,6 @@ const InvoiceDetails = ({ invoice }) => {
     },
     items,
   } = invoice
-  console.log(invoice)
 
   return (
     <main className='max-w-full xl:max-w-fit flex justify-center p-4 rounded-lg relative shadow-lg flex-col invoice-details sm:ml-20 bg-white'>

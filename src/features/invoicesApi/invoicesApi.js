@@ -111,7 +111,6 @@ const invoicesApi = invoiceApi.injectEndpoints({
                 project,
                 date,
               } = data
-              console.log(date)
 
               draft[0] = {
                 ...existingInvoice, // Preserve existing values

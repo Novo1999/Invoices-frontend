@@ -11,7 +11,6 @@ const FormRow = ({ label, name, className, type }) => {
     formState: { errors },
     setError,
   } = useFormContext()
-  console.log(errors)
   // dynamically setting validation properties
   const setValidationProperties = (name) => {
     let validation = { required: `${label} cannot be empty` }
