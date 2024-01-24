@@ -25,7 +25,7 @@ const Invoices = () => {
 
   // show loading skeleton
   if (isLoading || isLoadingOrder) {
-    content = Array.from({ length: 8 }, (_, i) => i).map((_, index) => (
+    content = Array.from({ length: 8 }).map((_, index) => (
       <div
         key={index}
         className='flex flex-col gap-4 w-full items-center justify-center mt-12 *:bg-gradient-to-r from-sky-400 to-cyan-300'

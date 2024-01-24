@@ -12,6 +12,8 @@ import useWindowDimensions from '../hooks/useWindowDimensions'
 import { makeId } from '../utils/idMaker.js'
 import { setFormWidth } from '../utils/setFormWidth'
 import { useForm } from 'react-hook-form'
+import { close } from '../features/sidebar/sidebarSlice.js'
+import { toast } from 'react-toastify'
 
 const defaultFormFieldInitializer = {
   itemList: [{ itemName: '', quantity: '', price: '' }],
@@ -110,7 +112,7 @@ export const useAddForm = () => {
         .then((payload) => {
           addOrder({ data: payload.id }) // sending the new order ID after posting invoice
 
-          // injecting the _id in the new order so user can click later to access them, without this, it would show undefined which should not happen
+          // injecting the _id in the new order so user can click later to access them, without this, it would show undefined which should not happen when hovered on the status button thats job is to lead to the invoice details
           dispatch(
             api.util.updateQueryData('getInvoices', undefined, (draft) => {
               draft.map((invoice) => {
@@ -122,6 +124,7 @@ export const useAddForm = () => {
             })
           )
         })
+      toast.success('New Invoice Added Successfully', { autoClose: 2000 })
     }
     // if edit mode, edit the invoice with the pre-filled form
     if (mode === 'edit' && id) {
@@ -132,7 +135,9 @@ export const useAddForm = () => {
           date: moment(date).format('DD MMMM YYYY'),
         },
       })
+      toast.success('Invoice Edited Successfully', { autoClose: 2000 })
     }
+    dispatch(close())
   }
 
   return { methods, delayedClass, sidebar, onSubmit }

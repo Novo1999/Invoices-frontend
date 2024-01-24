@@ -34,18 +34,20 @@ const InvoiceItem = ({ isDragging, invoice, setIsDragging }) => {
           <p className='text-sm lg:text-base  text-end font-semibold'>
             {name}{' '}
           </p>
-          <span
-            onTouchStart={() => setIsDragging(true)}
-            style={{ touchAction: 'none' }}
-          >
-            <GrDrag />
-          </span>
+          {filterBy === '' && (
+            <span
+              onTouchStart={() => setIsDragging(true)}
+              style={{ touchAction: 'none' }}
+            >
+              <GrDrag />
+            </span>
+          )}
         </div>
 
         <p className='hidden sm:block text-center font-semibold'>$ {amount}</p>
         {filterBy === '' && (
           <span
-            onTouchStart={() => setIsDragging(true)}
+            onDrag={() => setIsDragging(true)}
             style={{ touchAction: 'none' }}
             className='absolute right-[165px] lg:right-[170px] xl:right-[180px] 2xl:right-42 hidden sm:block cursor-grab'
           >

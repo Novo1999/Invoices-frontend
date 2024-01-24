@@ -7,6 +7,9 @@ import Invoices from './pages/Invoices'
 import Layout from './pages/Layout'
 import Login from './pages/Login.jsx'
 import SingleInvoice from './pages/SingleInvoice'
+import { ToastContainer, toast } from 'react-toastify'
+
+import 'react-toastify/dist/ReactToastify.css'
 
 const router = createBrowserRouter([
   {
@@ -39,6 +42,7 @@ function App() {
       <SignedIn>
         <RouterProvider router={router} />
       </SignedIn>
+      <ToastContainer />
     </Provider>
   )
 }

@@ -1,19 +1,26 @@
 import { motion } from 'framer-motion'
 import { FormProvider } from 'react-hook-form'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { useAddForm } from '../hooks/useAddForm.js'
 import DatePick from './DatePicker'
 import FormRow from './FormRow'
 import ItemListField from './ItemListField'
 import Overlay from './Overlay'
+import { RxCross2 } from 'react-icons/rx'
+import { close } from '../features/sidebar/sidebarSlice.js'
 
 const AddForm = () => {
   const {
     sidebarOpen,
     sidebarMode: { mode },
   } = useSelector((state) => state.sidebar)
+  const dispatch = useDispatch()
 
   const { methods, delayedClass, sidebar, onSubmit } = useAddForm()
+
+  const closeSidebar = () => {
+    dispatch(close())
+  }
 
   return (
     <section>
@@ -25,12 +32,18 @@ const AddForm = () => {
       >
         <FormProvider {...methods}>
           <motion.form
-            className='h-full space-y-2 text-xs overflow-y-auto scrollbar-hide'
+            className='h-full space-y-2 text-xs relative overflow-y-auto scrollbar-hide'
             initial='closed'
             animate={sidebarOpen ? 'open' : 'closed'}
             variants={sidebar}
             onSubmit={methods.handleSubmit(onSubmit)}
           >
+            <div
+              onClick={closeSidebar}
+              className='absolute right-1 text-3xl top-3 cursor-pointer'
+            >
+              <RxCross2 />
+            </div>
             <h1 className='text-2xl'>
               {mode === 'add' ? 'Add New' : 'Edit Form'}
             </h1>
