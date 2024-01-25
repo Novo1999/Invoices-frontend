@@ -71,7 +71,7 @@ const Invoices = () => {
     content = (
       <Reorder.Group
         axis='y'
-        values={items.map((item) => item?.id)} //passing the value of ids in an array so they are unique and reordering can happen
+        values={items?.map((item) => item?.id)} //passing the value of ids in an array so they are unique and reordering can happen
         onReorder={handleReorder}
         layoutScroll
       >

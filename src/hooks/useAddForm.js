@@ -58,7 +58,7 @@ export const useAddForm = () => {
     // Set a timeout to apply the delayed class
     const timeoutId = setTimeout(
       () => {
-        setDelayedClass(sidebarOpen ? 'p-5 transition-all' : '')
+        setDelayedClass(sidebarOpen ? 'p-5 transition-all' : '') //  without this the sidebar animation would not look so well
       },
       sidebarOpen ? 0 : 220
     )
@@ -105,6 +105,7 @@ export const useAddForm = () => {
       // adding the id from the invoices to the order array after adding an invoice
       addInvoice({
         ...data,
+        due: data?.payment.toString(),
         date: moment(date).format('DD MMMM YYYY'),
         id: `#${makeId(6)}`,
       })
