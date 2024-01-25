@@ -1,13 +1,13 @@
 import { SignedIn, SignedOut } from '@clerk/clerk-react'
 import { Provider } from 'react-redux'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
+import { ToastContainer } from 'react-toastify'
 import store from './app/store'
 import Error from './pages/ErrorPage'
 import Invoices from './pages/Invoices'
 import Layout from './pages/Layout'
 import Login from './pages/Login.jsx'
 import SingleInvoice from './pages/SingleInvoice'
-import { ToastContainer, toast } from 'react-toastify'
 
 import 'react-toastify/dist/ReactToastify.css'
 

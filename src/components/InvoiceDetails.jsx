@@ -42,7 +42,7 @@ const InvoiceDetails = ({ invoice }) => {
         </div>
       </div>
       <div className='flex flex-col sm:flex-row sm:justify-between mt-6 text-sm lg:text-lg'>
-        <div className='flex justify-between sm:w-[21rem] lg:w-[30rem] xl:w-[45rem] 2xl:w-[58rem]'>
+        <div className='flex justify-between lg:w-[30rem] xl:w-[45rem] 2xl:w-[58rem]'>
           <div className='space-y-1'>
             <p>Invoice Date</p>
             <h4>{moment(invoiceDate).format('DD-MM-YYYY')}</h4>
