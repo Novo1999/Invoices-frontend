@@ -13,8 +13,6 @@ const InvoiceItem = ({ isDragging, invoice, setIsDragging }) => {
     ? 'bg-gradient-to-r from-gray-700 via-gray-900 to-black'
     : 'bg-gradient-to-r from-sky-400 to-cyan-300'
 
-  console.log(isDragging)
-
   return (
     <Reorder.Item
       dragControls={controls}
