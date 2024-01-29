@@ -33,8 +33,8 @@ export const useInvoices = () => {
 
   // prevent user from dragging the items when they filter by status
   useEffect(() => {
-    if (filterBy !== '') setIsDragging(false)
-    if (filterBy === '') setIsDragging(true)
+    // if (filterBy !== '') setIsDragging(false)
+    // if (filterBy === '') setIsDragging(true)
   }, [filterBy])
 
   // set items when no loading or error state on mount

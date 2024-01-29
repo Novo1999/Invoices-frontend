@@ -49,7 +49,7 @@ const InvoicesHeader = () => {
       <div className='*:text-white'>
         <h1 className='font-semibold text-xl'>Invoices</h1>
         <p className='block sm:hidden'>
-          {filteredInvoicesCount || data?.length} {filterBy}{' '}
+          {filterBy !== '' ? filteredInvoicesCount : data?.length} {filterBy}{' '}
           {filterBy === '' && 'total'} invoices
         </p>
         {filterBy !== '' && (
@@ -75,7 +75,7 @@ const InvoicesHeader = () => {
         {/* add new invoice */}
         <button
           onClick={handleNewInvoiceClick}
-          className='btn rounded-full bg-gradient-to-r from-rose-700 to-pink-600 text-white '
+          className='btn rounded-full bg-green-500 text-white '
         >
           <span className='border border-white rounded-full p-1 text-lg'>
             <MdAddCircle />
