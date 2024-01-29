@@ -31,7 +31,7 @@ const InvoiceDetails = ({ invoice }) => {
     <main className={mainStyle}>
       <div className='flex justify-between text-sm lg:text-lg w-full'>
         <div>
-          <h4 className='font-semibold'>{id}</h4>
+          <h4 className='font-bold'>{id}</h4>
           <p>{project}</p>
         </div>
         <div className='text-end space-y-1'>
@@ -44,13 +44,13 @@ const InvoiceDetails = ({ invoice }) => {
       <div className='flex flex-col sm:flex-row sm:justify-between mt-6 text-sm lg:text-lg'>
         <div className='flex justify-between lg:w-[30rem] xl:w-[45rem] 2xl:w-[58rem]'>
           <div className='space-y-1'>
-            <p>Invoice Date</p>
+            <p className='font-bold'>Invoice Date</p>
             <h4>{moment(invoiceDate).format('DD-MM-YYYY')}</h4>
-            <p>Payment Due</p>
+            <p className='font-bold'>Payment Due</p>
             <h4>{due} days</h4>
           </div>
           <div className='space-y-1 text-end sm:text-start xl:mr-48'>
-            <p>Bill to</p>
+            <p className='font-bold'>Bill to</p>
             <h4>{name}</h4>
             <p>{billToStreet}</p>
             <p>{billToCity}</p>
@@ -59,7 +59,7 @@ const InvoiceDetails = ({ invoice }) => {
           </div>
         </div>
         <div className='text-center md:text-start'>
-          <p>Send to</p>
+          <p className='font-bold'>Send to</p>
           <p className='text-xl  text-center'>{email}</p>
         </div>
       </div>
@@ -75,7 +75,7 @@ const InvoiceDetails = ({ invoice }) => {
         ))}
       </section>
       <div className='flex justify-around h-40 lg:text-lg items-center bg-indigo-900 rounded-b-xl '>
-        <p>Amount Due</p>
+        <p className='font-bold'>Amount Due</p>
         <p>
           $ {items.reduce((acc, curr) => acc + curr.price * curr.quantity, 0)}
         </p>
