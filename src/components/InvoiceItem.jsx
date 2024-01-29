@@ -27,8 +27,8 @@ const InvoiceItem = ({ isDragging, invoice, setIsDragging }) => {
           <span className='text-gray-200'>{id[0]}</span>
           <span className='font-bold'>{id.slice(1)}</span>
         </div>
-        <p className='lg:col-span-1 text-xs font-thin'>Due {due} days</p>
-        <p className='block sm:hidden font-semibold'>$ {amount}</p>
+        <p className='lg:col-span-1 text-xs font-[600]'>Due {due} days</p>
+        <p className='block sm:hidden font-[500]'>$ {amount}</p>
         <p className='text-sm lg:text-base hidden sm:block text-end font-semibold'>
           {name}
         </p>
@@ -52,7 +52,7 @@ const InvoiceItem = ({ isDragging, invoice, setIsDragging }) => {
           )}
         </div>
 
-        <p className='hidden sm:block text-center font-semibold'>$ {amount}</p>
+        <p className='hidden sm:block text-center font-[500]'>$ {amount}</p>
         {filterBy === '' && (
           <span
             onPointerDown={(e) => {
